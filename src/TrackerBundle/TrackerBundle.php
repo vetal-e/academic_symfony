@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle;
+namespace TrackerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class AppBundle extends Bundle
+class TrackerBundle extends Bundle
 {
 }
