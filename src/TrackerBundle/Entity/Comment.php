@@ -28,8 +28,21 @@ class Comment
     protected $body;
 
     /**
-     * @TODO Many-to-one Author OOT-1345
+     * @var Issue
+     *
+     * @ORM\ManyToOne(targetEntity="Issue")
+     * @ORM\JoinColumn(name="issue_id", referencedColumnName="id", nullable=false)
      */
+    protected $issue;
+
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
+     */
+    protected $author;
 
     /**
      * @var \DateTime
@@ -142,5 +155,51 @@ class Comment
         if (empty($this->getCreatedAt())) {
             $this->setCreatedAt(new \DateTime());
         }
+    }
+
+    /**
+     * Set issue
+     *
+     * @param Issue $issue
+     * @return Comment
+     */
+    public function setIssue(Issue $issue)
+    {
+        $this->issue = $issue;
+
+        return $this;
+    }
+
+    /**
+     * Get issue
+     *
+     * @return Issue
+     */
+    public function getIssue()
+    {
+        return $this->issue;
+    }
+
+    /**
+     * Set author
+     *
+     * @param User $author
+     * @return Comment
+     */
+    public function setAuthor(User $author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return User
+     */
+    public function getAuthor()
+    {
+        return $this->author;
     }
 }

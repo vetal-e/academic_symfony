@@ -2,6 +2,7 @@
 
 namespace TrackerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -123,6 +124,22 @@ class Issue
     /**
      * @TODO Many-to-one Project OOT-1345
      */
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Comment",
+     *     mappedBy="issue",
+     *     cascade={"ALL"},
+     * )
+     */
+    protected $comments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -359,5 +376,38 @@ class Issue
         if (empty($this->getCreatedAt())) {
             $this->setCreatedAt(new \DateTime());
         }
+    }
+
+    /**
+     * Add comment
+     *
+     * @param Comment $comment
+     * @return Issue
+     */
+    public function addComment(Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param Comment $comment
+     */
+    public function removeComment(Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }
