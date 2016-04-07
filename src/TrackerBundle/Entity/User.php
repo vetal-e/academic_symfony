@@ -67,14 +67,19 @@ class User
      * @ORM\OneToMany(
      *     targetEntity="Comment",
      *     mappedBy="user",
-     *     cascade={"ALL"},
      * )
      */
     protected $comments;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Project", mappedBy="members")
+     */
+    protected $projects;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     /**
@@ -233,5 +238,38 @@ class User
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Add project
+     *
+     * @param Project $project
+     * @return User
+     */
+    public function addProject(Project $project)
+    {
+        $this->projects[] = $project;
+
+        return $this;
+    }
+
+    /**
+     * Remove project
+     *
+     * @param Project $project
+     */
+    public function removeProject(Project $project)
+    {
+        $this->projects->removeElement($project);
+    }
+
+    /**
+     * Get projects
+     *
+     * @return ArrayCollection
+     */
+    public function getProjects()
+    {
+        return $this->projects;
     }
 }

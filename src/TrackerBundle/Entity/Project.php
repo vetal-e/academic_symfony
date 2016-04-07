@@ -2,6 +2,7 @@
 
 namespace TrackerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,13 +42,23 @@ class Project
     protected $summary;
 
     /**
-     * @TODO Many-to-many Members (associated users) OOT-1345
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="projects")
+     * @ORM\JoinTable(name="project_user",
+     *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="member_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
      */
+    protected $members;
+
+    public function __construct()
+    {
+        $this->members = new ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -70,7 +81,7 @@ class Project
     /**
      * Get label
      *
-     * @return string 
+     * @return string
      */
     public function getLabel()
     {
@@ -93,7 +104,7 @@ class Project
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -116,10 +127,44 @@ class Project
     /**
      * Get summary
      *
-     * @return string 
+     * @return string
      */
     public function getSummary()
     {
         return $this->summary;
+    }
+
+    /**
+     * Add member
+     *
+     * @param User $member
+     * @return Project
+     */
+    public function addMember(User $member)
+    {
+        $member->addProject($this);
+        $this->members[] = $member;
+
+        return $this;
+    }
+
+    /**
+     * Remove member
+     *
+     * @param User $member
+     */
+    public function removeMember(User $member)
+    {
+        $this->members->removeElement($member);
+    }
+
+    /**
+     * Get members
+     *
+     * @return ArrayCollection
+     */
+    public function getMembers()
+    {
+        return $this->members;
     }
 }

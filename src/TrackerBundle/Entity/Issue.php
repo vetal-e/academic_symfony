@@ -131,7 +131,6 @@ class Issue
      * @ORM\OneToMany(
      *     targetEntity="Comment",
      *     mappedBy="issue",
-     *     cascade={"ALL"},
      * )
      */
     protected $comments;
