@@ -102,42 +102,65 @@ class Issue
     protected $updatedAt;
 
     /**
-     * @TODO One-to-many Reporter OOT-1345
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    protected $reporter;
 
     /**
-     * @TODO One-to-many Assignee OOT-1345
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="assignee_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    protected $assignee;
 
     /**
-     * @TODO Many-to-many Collaborators OOT-1345
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="issues")
+     * @ORM\JoinTable(name="issue_user",
+     *      joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="collaborator_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
      */
+    protected $collaborators;
 
     /**
-     * @TODO Many-to-one Parent issue (for Subtask) OOT-1345
+     * @var Issue
+     *
+     * @ORM\ManyToOne(targetEntity="Issue")
+     * @ORM\JoinColumn(name="parent_issue_id", referencedColumnName="id", onDelete="CASCADE")
      */
-
-    /**
-     * @TODO One-to-many Child issues (for Story) OOT-1345
-     */
-
-    /**
-     * @TODO Many-to-one Project OOT-1345
-     */
+    protected $parentIssue;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Comment",
-     *     mappedBy="issue",
-     * )
+     * @ORM\OneToMany(targetEntity="Issue", mappedBy="parentIssue")
+     */
+    protected $childIssues;
+
+    /**
+     * @var Project
+     *
+     * @ORM\ManyToOne(targetEntity="Project")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $project;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="issue")
      */
     protected $comments;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->collaborators = new ArrayCollection();
+        $this->childIssues = new ArrayCollection();
     }
 
     /**
@@ -408,5 +431,164 @@ class Issue
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Set reporter
+     *
+     * @param User $reporter
+     * @return Issue
+     */
+    public function setReporter(User $reporter = null)
+    {
+        $this->reporter = $reporter;
+
+        return $this;
+    }
+
+    /**
+     * Get reporter
+     *
+     * @return User
+     */
+    public function getReporter()
+    {
+        return $this->reporter;
+    }
+
+    /**
+     * Set assignee
+     *
+     * @param User $assignee
+     * @return Issue
+     */
+    public function setAssignee(User $assignee = null)
+    {
+        $this->assignee = $assignee;
+
+        return $this;
+    }
+
+    /**
+     * Get assignee
+     *
+     * @return User
+     */
+    public function getAssignee()
+    {
+        return $this->assignee;
+    }
+
+    /**
+     * Add collaborator
+     *
+     * @param User $collaborator
+     * @return Issue
+     */
+    public function addCollaborator(User $collaborator)
+    {
+        $collaborator->addIssue($this);
+        $this->collaborators[] = $collaborator;
+
+        return $this;
+    }
+
+    /**
+     * Remove collaborator
+     *
+     * @param User $collaborator
+     */
+    public function removeCollaborator(User $collaborator)
+    {
+        $this->collaborators->removeElement($collaborator);
+    }
+
+    /**
+     * Get collaborators
+     *
+     * @return ArrayCollection
+     */
+    public function getCollaborators()
+    {
+        return $this->collaborators;
+    }
+
+    /**
+     * Set project
+     *
+     * @param Project $project
+     * @return Issue
+     */
+    public function setProject(Project $project = null)
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return Project
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * Set parentIssue
+     *
+     * @param Issue $parentIssue
+     * @return Issue
+     */
+    public function setParentIssue(Issue $parentIssue = null)
+    {
+        $this->parentIssue = $parentIssue;
+
+        return $this;
+    }
+
+    /**
+     * Get parentIssue
+     *
+     * @return Issue
+     */
+    public function getParentIssue()
+    {
+        return $this->parentIssue;
+    }
+
+    /**
+     * Add childIssue
+     *
+     * @param Issue $childIssue
+     * @return Issue
+     */
+    public function addChildIssue(Issue $childIssue)
+    {
+        $this->childIssues[] = $childIssue;
+
+        return $this;
+    }
+
+    /**
+     * Remove childIssue
+     *
+     * @param Issue $childIssue
+     */
+    public function removeChildIssue(Issue $childIssue)
+    {
+        $this->childIssues->removeElement($childIssue);
+    }
+
+    /**
+     * Get childIssues
+     *
+     * @return ArrayCollection
+     */
+    public function getChildIssues()
+    {
+        return $this->childIssues;
     }
 }

@@ -42,6 +42,13 @@ class Project
     protected $summary;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Issue", mappedBy="project")
+     */
+    protected $issues;
+
+    /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="projects")
      * @ORM\JoinTable(name="project_user",
      *      joinColumns={@ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE")},
@@ -53,6 +60,7 @@ class Project
     public function __construct()
     {
         $this->members = new ArrayCollection();
+        $this->issues = new ArrayCollection();
     }
 
     /**
@@ -166,5 +174,38 @@ class Project
     public function getMembers()
     {
         return $this->members;
+    }
+
+    /**
+     * Add issue
+     *
+     * @param Issue $issue
+     * @return Project
+     */
+    public function addIssue(Issue $issue)
+    {
+        $this->issues[] = $issue;
+
+        return $this;
+    }
+
+    /**
+     * Remove issue
+     *
+     * @param Issue $issue
+     */
+    public function removeIssue(Issue $issue)
+    {
+        $this->issues->removeElement($issue);
+    }
+
+    /**
+     * Get issues
+     *
+     * @return ArrayCollection
+     */
+    public function getIssues()
+    {
+        return $this->issues;
     }
 }
