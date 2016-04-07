@@ -41,7 +41,7 @@ class Project
     protected $summary;
 
     /**
-     * @TODO Members (associated users) OOT-1345
+     * @TODO Many-to-many Members (associated users) OOT-1345
      */
 
     /**
