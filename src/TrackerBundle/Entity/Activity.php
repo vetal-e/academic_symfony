@@ -40,12 +40,20 @@ class Activity
     protected $content;
 
     /**
-     * @TODO Many-to-one Issue OOT-1345
+     * @var Issue
+     *
+     * @ORM\ManyToOne(targetEntity="Issue")
+     * @ORM\JoinColumn(name="issue_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    protected $issue;
 
     /**
-     * @TODO Many-to-one Comment OOT-1345
+     * @var Comment
+     *
+     * @ORM\ManyToOne(targetEntity="Issue")
+     * @ORM\JoinColumn(name="comment_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    protected $comment;
 
     /**
      * @var \DateTime
@@ -139,5 +147,51 @@ class Activity
     public function onPrePersist()
     {
         $this->setCreatedAt(new \DateTime());
+    }
+
+    /**
+     * Set issue
+     *
+     * @param Issue $issue
+     * @return Activity
+     */
+    public function setIssue(Issue $issue = null)
+    {
+        $this->issue = $issue;
+
+        return $this;
+    }
+
+    /**
+     * Get issue
+     *
+     * @return Issue
+     */
+    public function getIssue()
+    {
+        return $this->issue;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param Issue $comment
+     * @return Activity
+     */
+    public function setComment(Issue $comment = null)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return Issue
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

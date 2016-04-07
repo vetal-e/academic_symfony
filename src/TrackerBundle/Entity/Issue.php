@@ -156,11 +156,19 @@ class Issue
      */
     protected $comments;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Activity", mappedBy="issue")
+     */
+    protected $activities;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->collaborators = new ArrayCollection();
         $this->childIssues = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     /**
@@ -590,5 +598,38 @@ class Issue
     public function getChildIssues()
     {
         return $this->childIssues;
+    }
+
+    /**
+     * Add activity
+     *
+     * @param Activity $activity
+     * @return Issue
+     */
+    public function addActivity(Activity $activity)
+    {
+        $this->activities[] = $activity;
+
+        return $this;
+    }
+
+    /**
+     * Remove activity
+     *
+     * @param Activity $activity
+     */
+    public function removeActivity(Activity $activity)
+    {
+        $this->activities->removeElement($activity);
+    }
+
+    /**
+     * Get activities
+     *
+     * @return ArrayCollection
+     */
+    public function getActivities()
+    {
+        return $this->activities;
     }
 }
