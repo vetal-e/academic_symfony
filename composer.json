@@ -19,7 +19,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "mopa/bootstrap-bundle": "^3.0",
-        "twbs/bootstrap": "^3.3"
+        "twbs/bootstrap": "^3.3",
+        "leafo/lessphp": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
