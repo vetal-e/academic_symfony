@@ -90,3 +90,8 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: TrackerBundle\Entity\User
+
+# MopaBootstrapBundle Configuration
+mopa_bootstrap:
+    form: ~
+    menu: ~
