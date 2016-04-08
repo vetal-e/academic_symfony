@@ -24,7 +24,7 @@
         "knplabs/knp-menu-bundle": "dev-master",
         "knplabs/knp-menu": "2.1.*@dev",
         "craue/formflow-bundle": "~2.0",
-        "leafo/lessphp": "dev-master"
+        "leafo/lessphp": "0.4.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
