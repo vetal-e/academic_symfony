@@ -31,7 +31,7 @@ class User extends FOSUser
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="author")
      */
     protected $comments;
 

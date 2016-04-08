@@ -42,7 +42,7 @@ class Activity
     /**
      * @var Issue
      *
-     * @ORM\ManyToOne(targetEntity="Issue")
+     * @ORM\ManyToOne(targetEntity="Issue", inversedBy="activities")
      * @ORM\JoinColumn(name="issue_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $issue;
@@ -50,7 +50,7 @@ class Activity
     /**
      * @var Comment
      *
-     * @ORM\ManyToOne(targetEntity="Issue")
+     * @ORM\ManyToOne(targetEntity="Issue", inversedBy="activities")
      * @ORM\JoinColumn(name="comment_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $comment;
