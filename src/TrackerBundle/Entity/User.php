@@ -12,10 +12,6 @@ use FOS\UserBundle\Model\User as FOSUser;
  */
 class User extends FOSUser
 {
-    const ROLE_OPERATOR = 'Operator';
-    const ROLE_MANAGER  = 'Manager';
-    const ROLE_ADMIN    = 'Administrator';
-
     /**
      * @var integer
      *
