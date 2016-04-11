@@ -12,6 +12,10 @@ use FOS\UserBundle\Model\User as FOSUser;
  */
 class User extends FOSUser
 {
+    const ROLE_OPERATOR = 'Operator';
+    const ROLE_MANAGER = 'Manager';
+    const ROLE_ADMIN = 'Administrator';
+
     /**
      * @var integer
      *
@@ -68,6 +72,8 @@ class User extends FOSUser
         $this->reportedIssues = new ArrayCollection();
         $this->assignedIssues = new ArrayCollection();
         $this->issues = new ArrayCollection();
+
+        $this->addRole('ROLE_OPERATOR');
     }
 
     /**
@@ -266,5 +272,34 @@ class User extends FOSUser
     public function getIssues()
     {
         return $this->issues;
+    }
+
+    /**
+     * @param string $constName
+     * @return string
+     */
+    public function getRoleName($constName)
+    {
+        try {
+            return constant('self::' . $constName);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoleNames()
+    {
+        $roleNames = [];
+        foreach ($this->getRoles() as $roleConst) {
+            $roleName = $this->getRoleName($roleConst);
+            if (!empty($roleName)) {
+                $roleNames[] = $roleName;
+            }
+        }
+
+        return $roleNames;
     }
 }

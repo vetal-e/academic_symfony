@@ -1,0 +1,34 @@
+{% extends "layout.html.twig" %}
+
+{% block head_style %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    {{ parent() }}
+    User info
+{% endblock %}
+
+{% block content %}
+    <div class="form-horizontal">
+        <fieldset>
+            <legend>User info</legend>
+            <div class="form-group">
+                <label class="col-sm-3">Email</label>
+                <div class="col-sm-9">{{ user.email }}</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">Username</label>
+                <div class="col-sm-9">{{ user.username }}</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">Full name</label>
+                <div class="col-sm-9">{{ user.fullName }}</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">Roles</label>
+                <div class="col-sm-9">{{ roles }}</div>
+            </div>
+        </fieldset>
+    </div>
+{% endblock content %}
