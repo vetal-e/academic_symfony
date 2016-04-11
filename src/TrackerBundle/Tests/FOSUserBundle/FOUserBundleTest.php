@@ -50,4 +50,29 @@ class FOSUserBundleTest extends WebTestCase
             $client->getResponse()->getContent()
         );
     }
+
+    public function testLogin()
+    {
+        $client = static::createClient();
+        $client->restart();
+        $crawler = $client->request('GET', '/login');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('form[action="/login_check"]')->count());
+        $this->assertEquals(1, $crawler->filter('form[action="/login_check"] input[type=submit]')->count());
+
+        $form = $crawler->filter('form[action="/login_check"]')->form();
+        $form['_username'] = self::TEST_USER_NAME;
+        $form['_password'] = self::TEST_USER_PASSWORD;
+        $crawler = $client->submit($form);
+
+        $this->assertTrue($client->getResponse()->isRedirect());
+
+        $crawler = $client->followRedirect();
+
+        $this->assertNotContains(
+            'Invalid credentials',
+            $client->getResponse()->getContent()
+        );
+    }
 }
