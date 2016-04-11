@@ -29,6 +29,11 @@
                 <label class="col-sm-3">Roles</label>
                 <div class="col-sm-9">{{ roles }}</div>
             </div>
+            <div class="form-group">
+                <a href="{{ path('user_edit', {'userId': user.id}) }}" class="col-sm-3">
+                    Edit user info
+                </a>
+            </div>
         </fieldset>
     </div>
 {% endblock content %}
