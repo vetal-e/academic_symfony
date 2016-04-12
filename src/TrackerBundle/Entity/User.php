@@ -292,8 +292,16 @@ class User extends FOSUser
      */
     public function getRoleNames()
     {
+        $userRoles = $this->getRoles();
+        $orderedRoles = [
+            'ROLE_OPERATOR',
+            'ROLE_MANAGER',
+            'ROLE_ADMIN',
+        ];
+        $orderedUserRoles = array_intersect($orderedRoles, $userRoles);
+
         $roleNames = [];
-        foreach ($this->getRoles() as $roleConst) {
+        foreach ($orderedUserRoles as $roleConst) {
             $roleName = $this->getRoleName($roleConst);
             if (!empty($roleName)) {
                 $roleNames[] = $roleName;
