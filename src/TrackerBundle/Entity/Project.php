@@ -63,6 +63,11 @@ class Project
         $this->issues = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getCode() . ' ' . $this->getLabel();
+    }
+
     /**
      * Get id
      *

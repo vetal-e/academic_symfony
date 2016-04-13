@@ -50,7 +50,7 @@ class Activity
     /**
      * @var Comment
      *
-     * @ORM\ManyToOne(targetEntity="Issue", inversedBy="activities")
+     * @ORM\ManyToOne(targetEntity="Comment", inversedBy="activities")
      * @ORM\JoinColumn(name="comment_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $comment;

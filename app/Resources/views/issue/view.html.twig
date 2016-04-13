@@ -1,0 +1,137 @@
+{% extends "layout.html.twig" %}
+
+{% block head_style %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    {{ parent() }}
+    Issue info
+{% endblock %}
+
+{% block content %}
+    <div class="form-horizontal">
+        <fieldset>
+            <legend>Issue info</legend>
+            <div class="form-group">
+                <h3 class="col-sm-12">{{ issue.code }} {{ issue.summary }}</h3>
+            </div>
+
+            <div class="form-group">
+                <h4 class="col-sm-12"><a href="{{ path('project_view', {'id': issue.project.id}) }}">{{ issue.project.code }} {{ issue.project.label }}</a></h4>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2">Created at</label>
+                <div class="col-sm-4">{{ issue.createdAt|date('Y-m-d H:i:s') }}</div>
+
+                <label class="col-sm-2">Updated at</label>
+                <div class="col-sm-4">{{ issue.updatedAt|date('Y-m-d H:i:s') }}</div>
+            </div>
+
+            {% if issue.parentIssue %}
+            <div class="form-group">
+                <label class="col-sm-2">{{ issue.parentIssue.type=='TYPE_STORY' ? 'Story' : 'Parent task' }}</label>
+                <div class="col-sm-10"><a href="{{ path('issue_view', {'id': issue.parentIssue.id}) }}">{{ issue.parentIssue.code }} {{ issue.parentIssue.summary }}</a></div>
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label class="col-sm-2">Type</label>
+                <div class="col-sm-10">{{ issue.typeName }}</div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2">Status</label>
+                <div class="col-sm-10">{{ issue.statusName }}</div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2">Priority</label>
+                <div class="col-sm-10">{{ issue.priorityName }}</div>
+            </div>
+
+            {% if issue.resolution %}
+            <div class="form-group">
+                <label class="col-sm-2">Resolution</label>
+                <div class="col-sm-10">{{ issue.resolutionName }}</div>
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label class="col-sm-2">Assigned to</label>
+                {% if issue.assignee %}
+                <div class="col-sm-10"><a href="{{ path('user_view', {'id': issue.assignee.id}) }}">{{ issue.assignee.username }} {{ issue.assignee.fullName ? "(#{issue.assignee.fullName})" : '' }}</a></div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2">Reported by</label>
+                {% if issue.reporter %}
+                <div class="col-sm-10"><a href="{{ path('user_view', {'id': issue.reporter.id}) }}">{{ issue.reporter.username }} {{ issue.reporter.fullName ? "(#{issue.reporter.fullName})" : '' }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2">Description</label>
+                <pre class="col-sm-10">{{ issue.description }}</pre>
+            </div>
+
+            {% if issue.childIssues is not empty %}
+            <div class="form-group">
+                <label class="col-sm-2">{{ issue.type == 'TYPE_STORY' ? 'Tasks' : 'Subtasks' }}</label>
+                {% for child in issue.childIssues %}
+                <div class="col-sm-10">
+                    <a href="{{ path('issue_view', {'id': child.id}) }}">{{ child.code }} {{ child.summary }}</a>
+                    {% if child.childIssues %}
+                        {% for subtask in child.childIssues %}
+                            <div class="col-sm-12">– <a href="{{ path('issue_view', {'id': subtask.id}) }}">{{ subtask.code }} {{ subtask.summary }}</a></div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label class="col-sm-2">Comments</label>
+                <div class="col-sm-10">
+                    {% for comment in issue.comments %}
+                        <div class="col-sm-12">
+                            <div><a href="{{ path('user_view', {'id': comment.author.id}) }}">{{ comment.author.username }}</a></div>
+                            <div>{{ comment.updatedAt|date('Y-m-d H:i:s') }}</div>
+                            <pre>{{ comment.body }}</pre>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2">Collaborators</label>
+                <div class="col-sm-10">
+                    {% for collaborator in issue.collaborators %}
+                        <div class="col-sm-12">
+                            <div><a href="{{ path('user_view', {'id': collaborator.id}) }}">{{ collaborator.username }} {{ collaborator.fullName ? "(#{collaborator.fullName})" : '' }}</a></div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2">Activities</label>
+                <div class="col-sm-10">
+                    {% for activity in issue.activities %}
+                        <div class="col-sm-12">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <a href="{{ path('issue_edit', {'id': issue.id}) }}" class="col-sm-2">
+                    Edit issue
+                </a>
+            </div>
+        </fieldset>
+    </div>
+{% endblock content %}

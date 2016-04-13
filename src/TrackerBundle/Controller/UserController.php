@@ -13,20 +13,20 @@ use TrackerBundle\Entity\User;
 class UserController extends Controller
 {
     /**
-     * @Route("/user/view/{userId}", name="user_view", requirements={"userId": "\d+"})
+     * @Route("/user/view/{id}", name="user_view", requirements={"id": "\d+"})
      * @Method({"GET"})
      * @Template("user/view.html.twig")
      *
-     * @param number $userId
+     * @param number $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewAction($userId = null)
+    public function viewAction($id = null)
     {
         /** @var User $user */
-        if (empty($userId)) {
+        if (empty($id)) {
             $user = $this->getUser();
         } else {
-            $user = $this->getDoctrine()->getRepository('TrackerBundle:User')->findOneById($userId);
+            $user = $this->getDoctrine()->getRepository('TrackerBundle:User')->findOneById($id);
         }
 
         if (empty($user)) {
@@ -40,20 +40,20 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/user/edit/{userId}", name="user_edit", requirements={"userId": "\d+"})
+     * @Route("/user/edit/{id}", name="user_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @Template("user/edit.html.twig")
      *
-     * @param number $userId
+     * @param number $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, $userId = null)
+    public function editAction(Request $request, $id = null)
     {
         /** @var User $user */
-        if (empty($userId)) {
+        if (empty($id)) {
             $user = $this->getUser();
         } else {
-            $user = $this->getDoctrine()->getRepository('TrackerBundle:User')->findOneById($userId);
+            $user = $this->getDoctrine()->getRepository('TrackerBundle:User')->findOneById($id);
         }
 
         if (empty($user)) {
@@ -67,7 +67,7 @@ class UserController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_view', ['userId' => $user->getId()]);
+            return $this->redirectToRoute('user_view', ['id' => $user->getId()]);
         }
 
         return [

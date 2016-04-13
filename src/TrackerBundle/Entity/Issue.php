@@ -169,6 +169,13 @@ class Issue
         $this->collaborators = new ArrayCollection();
         $this->childIssues = new ArrayCollection();
         $this->activities = new ArrayCollection();
+
+        $this->setStatus('STATUS_OPEN');
+    }
+
+    public function __toString()
+    {
+        return $this->getCode() . ' ' . $this->getSummary();
     }
 
     /**
@@ -274,6 +281,18 @@ class Issue
     }
 
     /**
+     * @return string
+     */
+    public function getTypeName()
+    {
+        try {
+            return constant('self::' . $this->getType());
+        } catch (\Exception $e) {
+            return $this->getType();
+        }
+    }
+
+    /**
      * Set priority
      *
      * @param string $priority
@@ -294,6 +313,18 @@ class Issue
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriorityName()
+    {
+        try {
+            return constant('self::' . $this->getPriority());
+        } catch (\Exception $e) {
+            return $this->getPriority();
+        }
     }
 
     /**
@@ -320,6 +351,18 @@ class Issue
     }
 
     /**
+     * @return string
+     */
+    public function getStatusName()
+    {
+        try {
+            return constant('self::' . $this->getStatus());
+        } catch (\Exception $e) {
+            return $this->getStatus();
+        }
+    }
+
+    /**
      * Set resolution
      *
      * @param string $resolution
@@ -340,6 +383,18 @@ class Issue
     public function getResolution()
     {
         return $this->resolution;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResolutionName()
+    {
+        try {
+            return constant('self::' . $this->getResolution());
+        } catch (\Exception $e) {
+            return $this->getResolution();
+        }
     }
 
     /**
