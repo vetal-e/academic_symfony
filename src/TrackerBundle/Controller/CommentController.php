@@ -86,4 +86,25 @@ class CommentController extends Controller
             'pageTitle' => 'Edit comment',
         ];
     }
+
+    /**
+     * @Route("/comment/delete/{id}", name="comment_delete")
+     * @ParamConverter("comment", class="TrackerBundle:Comment")
+     * @Method({"GET", "POST"})
+     *
+     * @param Comment $comment
+     * @return Response
+     */
+    public function deleteAction(Comment $comment)
+    {
+        $this->denyAccessUnlessGranted('delete', $comment, 'You cannot delete other people\'s comments');
+
+        $issue = $comment->getIssue();
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($comment);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('issue_view', ['id' => $issue->getId()]);
+    }
 }

@@ -113,6 +113,9 @@
                                 {% if is_granted('edit', comment) %}
                                     <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
                                 {% endif %}
+                                {% if is_granted('delete', comment) %}
+                                    <a href="{{ path('comment_delete', {'id': comment.id}) }}">delete</a>
+                                {% endif %}
                             </div>
                             <div>{{ comment.updatedAt|date('Y-m-d H:i:s') }}</div>
                             <pre>{{ comment.body }}</pre>
