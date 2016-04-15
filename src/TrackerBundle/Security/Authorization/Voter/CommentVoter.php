@@ -46,12 +46,12 @@ class CommentVoter extends AbstractVoter
                 }
                 break;
             case self::EDIT:
-                if ($user->getId() === $comment->getAuthor()->getId()) {
+                if ($user->getId() === $comment->getAuthor()->getId() or $user->hasRole('ROLE_ADMIN')) {
                     return true;
                 }
                 break;
             case self::DELETE:
-                if ($user->getId() === $comment->getAuthor()->getId()) {
+                if ($user->getId() === $comment->getAuthor()->getId() or $user->hasRole('ROLE_ADMIN')) {
                     return true;
                 }
                 break;
