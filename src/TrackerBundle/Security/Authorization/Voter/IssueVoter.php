@@ -9,11 +9,14 @@ use TrackerBundle\Entity\User;
 
 class IssueVoter extends AbstractVoter
 {
+    const VIEW = 'view';
+    const CREATE = 'create';
+    const EDIT = 'edit';
     const COMMENT = 'comment';
 
     protected function getSupportedAttributes()
     {
-        return array(self::COMMENT);
+        return array(self::VIEW, self::CREATE, self::EDIT, self::COMMENT);
     }
 
     protected function getSupportedClasses()
@@ -37,7 +40,26 @@ class IssueVoter extends AbstractVoter
             throw new \LogicException('The user is of unsupported class');
         }
 
+        if ($user->hasRole('ROLE_MANAGER') or $user->hasRole('ROLE_ADMIN')) {
+            return true;
+        }
+
         switch ($attribute) {
+            case self::VIEW:
+                if ($user->hasRole('ROLE_OPERATOR') and $issue->getProject()->getMembers()->contains($user)) {
+                    return true;
+                }
+                break;
+            case self::CREATE:
+                if ($user->hasRole('ROLE_OPERATOR') and $issue->getProject()->getMembers()->contains($user)) {
+                    return true;
+                }
+                break;
+            case self::EDIT:
+                if ($user->hasRole('ROLE_OPERATOR') and $issue->getProject()->getMembers()->contains($user)) {
+                    return true;
+                }
+                break;
             case self::COMMENT:
                 if ($issue->getProject()->getMembers()->contains($user)) {
                     return true;

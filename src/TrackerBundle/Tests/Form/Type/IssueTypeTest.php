@@ -122,7 +122,6 @@ class IssueTypeTest extends TypeTestCase
                 'submittedData' => [
                     'summary' => 'issue_summary',
                     'code' => 'issue_code',
-                    'project' => 2,
                     'status' => 'STATUS_IN_PROGRESS',
                     'type' => 'TYPE_TASK',
                     'priority' => 'PRIORITY_HIGH',
@@ -134,7 +133,6 @@ class IssueTypeTest extends TypeTestCase
                 'expectedData' => [
                     'summary' => 'issue_summary',
                     'code' => 'issue_code',
-                    'project' => $this->getEntity('TrackerBundle\Entity\Project', 2),
                     'status' => 'STATUS_IN_PROGRESS',
                     'type' => 'TYPE_TASK',
                     'priority' => 'PRIORITY_HIGH',

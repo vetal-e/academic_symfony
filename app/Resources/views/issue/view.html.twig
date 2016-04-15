@@ -146,9 +146,11 @@
             </div>
 
             <div class="form-group">
-                <a href="{{ path('issue_edit', {'id': issue.id}) }}" class="col-sm-2">
-                    Edit issue
-                </a>
+                {% if is_granted('edit', issue) %}
+                    <a href="{{ path('issue_edit', {'id': issue.id}) }}" class="col-sm-2">
+                        Edit issue
+                    </a>
+                {% endif %}
             </div>
         </fieldset>
     </div>

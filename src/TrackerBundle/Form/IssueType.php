@@ -19,14 +19,15 @@ class IssueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('project', 'entity', [
+                'class' => 'TrackerBundle\Entity\Project',
+                'disabled' => 'true',
+            ])
             ->add('summary', 'text')
             ->add('code', 'text', [
                 'attr' => [
                     'maxlength' => 20,
                 ]
-            ])
-            ->add('project', 'entity', [
-                'class' => 'TrackerBundle\Entity\Project',
             ]);
 
         if ($this->action === 'edit') {
