@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use TrackerBundle\Entity\Project;
+use TrackerBundle\Entity\Repository\IssueRepository;
+use TrackerBundle\Entity\Repository\ProjectRepository;
 use TrackerBundle\Form\ProjectType;
 
 class ProjectController extends Controller
@@ -25,8 +27,13 @@ class ProjectController extends Controller
      */
     public function viewAction($project)
     {
+        /** @var IssueRepository $issueRepository */
+        $issueRepository = $this->getDoctrine()->getRepository('TrackerBundle:Issue');
+        $rootProjectIssues = $issueRepository->getRootProjectIssues($project);
+
         return [
             'project' => $project,
+            'rootIssues' => $rootProjectIssues,
         ];
     }
 

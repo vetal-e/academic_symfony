@@ -14,21 +14,34 @@
         <fieldset>
             <legend>Project info</legend>
             <div class="form-group">
-                <label class="col-sm-3">Label</label>
-                <div class="col-sm-9">{{ project.label }}</div>
+                <h3 class="col-sm-12">{{ project.code }} {{ project.label }}</h3>
             </div>
             <div class="form-group">
-                <label class="col-sm-3">Code</label>
-                <div class="col-sm-9">{{ project.code }}</div>
+                <label class="col-sm-2">Summary</label>
+                <pre class="col-sm-10">{{ project.summary }}</pre>
             </div>
             <div class="form-group">
-                <label class="col-sm-3">Summary</label>
-                <pre class="col-sm-9">{{ project.summary }}</pre>
-            </div>
-            <div class="form-group">
-                <a href="{{ path('project_edit', {'id': project.id}) }}" class="col-sm-3">
+                <a href="{{ path('project_edit', {'id': project.id}) }}" class="col-sm-2">
                     Edit project
                 </a>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">Issues</label>
+                <div class="col-sm-10">
+                    <a href="{{ path('issue_create', {'id': project.id}) }}">New issue</a>
+
+                    <div class="col-sm-12 list-group">
+                    {% for issue in rootIssues %}
+                        <div class="list-group-item">
+                            <div><a href="{{ path('issue_view', {'id': issue.id}) }}">{{ issue.code }} {{ issue.summary }}</a></div>
+                            <small>{{ issue.createdAt|date('Y-m-d H:i:s') }} <a href="{{ path('issue_edit', {'id': issue.id}) }}">edit</a></small>
+                            {% if issue.childIssues is not empty %}
+                                <div class="small"><span class="glyphicon glyphicon-triangle-right small" aria-hidden="true"></span> <a href="{{ path('issue_view', {'id': issue.id}) }}">subtasks</a></div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
             </div>
         </fieldset>
     </div>

@@ -3,6 +3,7 @@
 namespace TrackerBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use TrackerBundle\Entity\Project;
 
 /**
  * IssueRepository
@@ -12,4 +13,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class IssueRepository extends EntityRepository
 {
+    public function getRootProjectIssues(Project $project)
+    {
+        $rootProjectIssues = $this->findBy([
+            'project' => $project,
+            'parentIssue' => null,
+        ]);
+
+        return $rootProjectIssues;
+    }
 }
