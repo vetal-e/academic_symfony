@@ -60,6 +60,12 @@ class UserController extends Controller
             throw $this->createNotFoundException('User not found');
         }
 
+        $this->denyAccessUnlessGranted(
+            'edit',
+            $user,
+            'You don\'t have permissions to edit this user'
+        );
+
         $form = $this->createForm(new UserType(), $user, ['label' => 'Edit user info']);
 
         $form->handleRequest($request);
