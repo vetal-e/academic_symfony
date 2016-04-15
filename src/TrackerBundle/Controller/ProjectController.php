@@ -10,8 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use TrackerBundle\Entity\Project;
-use TrackerBundle\Entity\Repository\IssueRepository;
-use TrackerBundle\Entity\Repository\ProjectRepository;
 use TrackerBundle\Form\ProjectType;
 
 class ProjectController extends Controller
@@ -27,7 +25,12 @@ class ProjectController extends Controller
      */
     public function viewAction($project)
     {
-        /** @var IssueRepository $issueRepository */
+        $this->denyAccessUnlessGranted(
+            'view',
+            $project,
+            'You don\'t have permissions to view this'
+        );
+
         $issueRepository = $this->getDoctrine()->getRepository('TrackerBundle:Issue');
         $rootProjectIssues = $issueRepository->getRootProjectIssues($project);
 
@@ -48,6 +51,13 @@ class ProjectController extends Controller
     public function createAction(Request $request)
     {
         $project = new Project();
+
+        $this->denyAccessUnlessGranted(
+            'create',
+            $project,
+            'You don\'t have permissions to create projects'
+        );
+
         $form = $this->createForm(new ProjectType(), $project, ['label' => 'Create project']);
 
         $form->handleRequest($request);
@@ -78,6 +88,12 @@ class ProjectController extends Controller
      */
     public function editAction(Request $request, Project $project)
     {
+        $this->denyAccessUnlessGranted(
+            'edit',
+            $project,
+            'You don\'t have permissions to edit this project'
+        );
+
         $form = $this->createForm(new ProjectType(), $project, ['label' => 'Edit project']);
 
         $form->handleRequest($request);

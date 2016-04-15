@@ -12,10 +12,11 @@ class ProjectVoter extends AbstractVoter
     const VIEW = 'view';
     const CREATE = 'create';
     const EDIT = 'edit';
+    const CREATE_ISSUE = 'create_issue';
 
     protected function getSupportedAttributes()
     {
-        return array(self::VIEW, self::CREATE, self::EDIT);
+        return array(self::VIEW, self::CREATE, self::EDIT, self::CREATE_ISSUE);
     }
 
     protected function getSupportedClasses()
@@ -45,6 +46,11 @@ class ProjectVoter extends AbstractVoter
 
         switch ($attribute) {
             case self::VIEW:
+                if ($user->hasRole('ROLE_OPERATOR') and $project->getMembers()->contains($user)) {
+                    return true;
+                }
+                break;
+            case self::CREATE_ISSUE:
                 if ($user->hasRole('ROLE_OPERATOR') and $project->getMembers()->contains($user)) {
                     return true;
                 }

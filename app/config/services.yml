@@ -17,3 +17,8 @@ services:
         public:     false
         tags:
             - { name: security.voter }
+    security.access.project_voter:
+        class:      TrackerBundle\Security\Authorization\Voter\ProjectVoter
+        public:     false
+        tags:
+            - { name: security.voter }

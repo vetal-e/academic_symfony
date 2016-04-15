@@ -96,14 +96,10 @@
             <div class="form-group">
                 <label class="col-sm-2">Comments</label>
                 <div class="col-sm-10">
-                    {% if is_granted('ROLE_OPERATOR') %}
-                        {% if is_granted('comment', issue) %}
-                            <a href="{{ path('comment_create', {'id': issue.id}) }}">Add comment</a>
-                        {% else %}
-                            You have to be a project member to comment
-                        {% endif %}
+                    {% if is_granted('comment', issue) %}
+                        <a href="{{ path('comment_create', {'id': issue.id}) }}">Add comment</a>
                     {% else %}
-                        <a href="{{ path('fos_user_security_login') }}">Log in</a> to add comment
+                        You have to be a project member to comment
                     {% endif %}
 
                     <div class="col-sm-12 list-group">

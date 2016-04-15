@@ -21,20 +21,26 @@
                 <pre class="col-sm-10">{{ project.summary }}</pre>
             </div>
             <div class="form-group">
-                <a href="{{ path('project_edit', {'id': project.id}) }}" class="col-sm-2">
-                    Edit project
-                </a>
+                {% if is_granted('edit', project) %}
+                    <a href="{{ path('project_edit', {'id': project.id}) }}" class="col-sm-2">Edit project</a>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label class="col-sm-2">Issues</label>
                 <div class="col-sm-10">
-                    <a href="{{ path('issue_create', {'id': project.id}) }}">New issue</a>
+                    {% if is_granted('create_issue', project) %}
+                        <a href="{{ path('issue_create', {'id': project.id}) }}">New issue</a>
+                    {% endif %}
 
                     <div class="col-sm-12 list-group">
                     {% for issue in rootIssues %}
                         <div class="list-group-item">
                             <div><a href="{{ path('issue_view', {'id': issue.id}) }}">{{ issue.code }} {{ issue.summary }}</a></div>
-                            <small>{{ issue.createdAt|date('Y-m-d H:i:s') }} <a href="{{ path('issue_edit', {'id': issue.id}) }}">edit</a></small>
+                            <small>{{ issue.createdAt|date('Y-m-d H:i:s') }}
+                                {% if is_granted('edit', issue) %}
+                                    <a href="{{ path('issue_edit', {'id': issue.id}) }}">edit</a>
+                                {% endif %}
+                            </small>
                             {% if issue.childIssues is not empty %}
                                 <div class="small"><span class="glyphicon glyphicon-triangle-right small" aria-hidden="true"></span> <a href="{{ path('issue_view', {'id': issue.id}) }}">subtasks</a></div>
                             {% endif %}
