@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use TrackerBundle\Entity\Comment;
+use TrackerBundle\Entity\Issue;
 use TrackerBundle\Form\CommentType;
 
 class CommentController extends Controller
@@ -21,13 +22,20 @@ class CommentController extends Controller
      * @Template("comment/edit.html.twig")
      *
      * @param Request $request
-     * @param $issue
+     * @param Issue $issue
      * @return Response
      */
-    public function createAction(Request $request, $issue)
+    public function createAction(Request $request, Issue $issue)
     {
         $comment = new Comment();
         $comment->setIssue($issue);
+
+        $this->denyAccessUnlessGranted(
+            'create',
+            $comment,
+            'You have to be a member of the project to be able to comment'
+        );
+
         $comment->setAuthor($this->getUser());
 
         $form = $this->createForm(new CommentType(), $comment, ['label' => 'Add comment']);
@@ -60,6 +68,8 @@ class CommentController extends Controller
      */
     public function editAction(Request $request, Comment $comment)
     {
+        $this->denyAccessUnlessGranted('edit', $comment, 'You cannot edit other people\'s comments');
+
         $form = $this->createForm(new CommentType('edit'), $comment, ['label' => 'Edit comment']);
 
         $form->handleRequest($request);
