@@ -21,5 +21,23 @@
     <h1>Issue Tracker Service</h1>
 
     {% import _self as blocks %}
-    {{ blocks.itemsList(projects) }}
+
+    <ul class="nav nav-pills nav-stacked col-sm-3">
+        <li class="active"><a data-toggle="pill" href="#projects">Projects</a></li>
+        <li><a data-toggle="pill" href="#issues">Issues</a></li>
+        <li><a data-toggle="pill" href="#activities">Activities</a></li>
+    </ul>
+
+    <div class="tab-content col-sm-9">
+        <div id="projects" class="tab-pane fade in active">
+            <h3>Projects</h3>
+            {{ blocks.itemsList(projects) }}
+        </div>
+        <div id="issues" class="tab-pane fade in">
+            <h3>Issues</h3>
+        </div>
+        <div id="activities" class="tab-pane fade in">
+            <h3>Activities</h3>
+        </div>
+    </div>
 {% endblock %}
