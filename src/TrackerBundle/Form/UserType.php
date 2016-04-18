@@ -9,6 +9,13 @@ use TrackerBundle\Entity\User;
 
 class UserType extends AbstractType
 {
+    protected $canChangeRoles;
+
+    public function __construct($canChangeRoles = false)
+    {
+        $this->canChangeRoles = $canChangeRoles;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -25,6 +32,7 @@ class UserType extends AbstractType
                 ],
                 'choices_as_values' => true,
                 'multiple' => true,
+                'disabled' => !$this->canChangeRoles,
             ])
             ->add('save', 'submit', [
                 'label' => 'Save',

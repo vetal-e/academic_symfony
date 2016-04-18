@@ -9,10 +9,11 @@ use TrackerBundle\Entity\User;
 class UserVoter extends AbstractVoter
 {
     const EDIT = 'edit';
+    const CHANGE_ROLES = 'change_roles';
 
     protected function getSupportedAttributes()
     {
-        return array(self::EDIT);
+        return array(self::EDIT, self::CHANGE_ROLES);
     }
 
     protected function getSupportedClasses()
@@ -43,6 +44,11 @@ class UserVoter extends AbstractVoter
         switch ($attribute) {
             case self::EDIT:
                 if ($userObject == $user) {
+                    return true;
+                }
+                break;
+            case self::CHANGE_ROLES:
+                if ($user->hasRole('ROLE_ADMIN')) {
                     return true;
                 }
                 break;

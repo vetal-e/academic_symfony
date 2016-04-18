@@ -66,11 +66,21 @@ class UserController extends Controller
             'You don\'t have permissions to edit this user'
         );
 
-        $form = $this->createForm(new UserType(), $user, ['label' => 'Edit user info']);
+        $canChangeRoles = false;
+        $rolesStash = $user->getRoles();
+        if ($this->isGranted('change_roles', $user)) {
+            $canChangeRoles = true;
+        }
+
+        $form = $this->createForm(new UserType($canChangeRoles), $user, ['label' => 'Edit user info']);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (!$canChangeRoles) {
+                $user->setRoles($rolesStash);
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user_view', ['id' => $user->getId()]);
