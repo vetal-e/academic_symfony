@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="TrackerBundle\Entity\Repository\CommentRepository")
  * @ORM\Table(name="comment")
  * @ORM\HasLifecycleCallbacks
+ * @ORM\EntityListeners({"TrackerBundle\Entity\Listener\CommentListener"})
  */
 class Comment
 {
