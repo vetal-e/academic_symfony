@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="TrackerBundle\Entity\Repository\ProjectRepository")
  * @ORM\Table(name="project")
  */
-class Project
+class Project implements HomePageListableInterface
 {
     /**
      * @var integer
@@ -212,5 +212,15 @@ class Project
     public function getIssues()
     {
         return $this->issues;
+    }
+
+    public function getRoute()
+    {
+        return 'project_view';
+    }
+
+    public function getCaption()
+    {
+        return $this->getCode() . ' ' . $this->getLabel();
     }
 }
