@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="TrackerBundle\Entity\Repository\IssueRepository")
  * @ORM\Table(name="issue")
  * @ORM\HasLifecycleCallbacks
+ * @ORM\EntityListeners({"TrackerBundle\Entity\Listener\IssueListener"})
  */
 class Issue
 {
