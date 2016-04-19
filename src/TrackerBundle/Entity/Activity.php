@@ -56,6 +56,14 @@ class Activity
     protected $comment;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="generatedActivities")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $user;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -175,10 +183,10 @@ class Activity
     /**
      * Set comment
      *
-     * @param Issue $comment
+     * @param Comment $comment
      * @return Activity
      */
-    public function setComment(Issue $comment = null)
+    public function setComment(Comment $comment = null)
     {
         $this->comment = $comment;
 
@@ -193,5 +201,28 @@ class Activity
     public function getComment()
     {
         return $this->comment;
+    }
+
+    /**
+     * Set user
+     *
+     * @param User $user
+     * @return Activity
+     */
+    public function setUser(User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

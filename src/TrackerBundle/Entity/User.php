@@ -63,6 +63,13 @@ class User extends FOSUser
      */
     protected $issues;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Activity", mappedBy="user")
+     */
+    protected $generatedActivities;
+
     public function __construct()
     {
         parent::__construct();
@@ -72,6 +79,7 @@ class User extends FOSUser
         $this->reportedIssues = new ArrayCollection();
         $this->assignedIssues = new ArrayCollection();
         $this->issues = new ArrayCollection();
+        $this->generatedActivities = new ArrayCollection();
 
         $this->addRole('ROLE_OPERATOR');
     }
@@ -309,5 +317,38 @@ class User extends FOSUser
         }
 
         return $roleNames;
+    }
+
+    /**
+     * Add generatedActivity
+     *
+     * @param Activity $generatedActivity
+     * @return User
+     */
+    public function addGeneratedActivity(Activity $generatedActivity)
+    {
+        $this->generatedActivities[] = $generatedActivity;
+
+        return $this;
+    }
+
+    /**
+     * Remove generatedActivity
+     *
+     * @param Activity $generatedActivity
+     */
+    public function removeGeneratedActivity(Activity $generatedActivity)
+    {
+        $this->generatedActivities->removeElement($generatedActivity);
+    }
+
+    /**
+     * Get generatedActivities
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGeneratedActivities()
+    {
+        return $this->generatedActivities;
     }
 }

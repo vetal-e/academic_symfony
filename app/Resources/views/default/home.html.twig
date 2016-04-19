@@ -39,6 +39,14 @@
         </div>
         <div id="activities" class="tab-pane fade in">
             <h3>Activities</h3>
+            <ul class="list-group">
+                {% for activity in activities %}
+                    <li class="list-group-item">
+                        <div>{{ activity.content | raw }}</div>
+                        <small>{{ activity.createdAt|date('Y-m-d H:i:s') }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}

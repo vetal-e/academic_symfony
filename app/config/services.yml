@@ -27,3 +27,13 @@ services:
         public:     false
         tags:
             - { name: security.voter }
+    tracker.issue.listener:
+        class:      TrackerBundle\Entity\Listener\IssueListener
+        arguments:  ["@security.token_storage"]
+        tags:
+            - { name: doctrine.orm.entity_listener }
+    tracker.comment.listener:
+        class:      TrackerBundle\Entity\Listener\CommentListener
+        arguments:  ["@security.token_storage"]
+        tags:
+            - { name: doctrine.orm.entity_listener }

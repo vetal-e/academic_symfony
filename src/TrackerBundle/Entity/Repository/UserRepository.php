@@ -3,10 +3,17 @@
 namespace TrackerBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use TrackerBundle\Entity\Activity;
+use TrackerBundle\Entity\Issue;
+use TrackerBundle\Entity\Project;
 use TrackerBundle\Entity\User;
 
 class UserRepository extends EntityRepository
 {
+    /**
+     * @param User $user
+     * @return Project[]
+     */
     public function getUserProjects(User $user)
     {
         if ($user->hasRole('ROLE_MANAGER') or $user->hasRole('ROLE_ADMIN')) {
@@ -19,6 +26,10 @@ class UserRepository extends EntityRepository
         return $projects;
     }
 
+    /**
+     * @param User $user
+     * @return Issue[]
+     */
     public function getUserIssues(User $user)
     {
         $issueRepository = $this->getEntityManager()->getRepository('TrackerBundle:Issue');
@@ -36,5 +47,26 @@ class UserRepository extends EntityRepository
             ->getResult();
 
         return $issues;
+    }
+
+    /**
+     * @param User $user
+     * @return Activity[]
+     */
+    public function getUserActivities(User $user)
+    {
+        $activityRepository = $this->getEntityManager()->getRepository('TrackerBundle:Activity');
+        $activities = $activityRepository->createQueryBuilder('a')
+            ->innerJoin('a.issue', 'i')
+            ->innerJoin('i.collaborators', 'u')
+            ->where('u.id = :userId')
+            ->setParameters([
+                'userId' => $user->getId(),
+            ])
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return $activities;
     }
 }
