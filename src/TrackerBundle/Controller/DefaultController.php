@@ -45,6 +45,12 @@ class DefaultController extends Controller
     private function replaceActivityPlaceholders($activities)
     {
         foreach ($activities as $activity) {
+            if (!empty($activity->getComment())) {
+                $commentAnchor = '#comment-' . $activity->getComment()->getId();
+            } else {
+                $commentAnchor = '';
+            }
+
             $values = [
                 '%username_url%' => '<a href="' . $this->generateUrl('user_view', ['id' => $activity->getUser()->getId()]) . '">' . $activity->getUser()->getUsername() . '</a>',
                 '%issue_url%' => '<a href="' . $this->generateUrl('issue_view', ['id' => $activity->getIssue()->getId()]) . '">' . $activity->getIssue()->getCode() . '</a>',
@@ -58,7 +64,7 @@ class DefaultController extends Controller
                 '%RESOLUTION_RESOLVED%' => Issue::RESOLUTION_RESOLVED,
                 '%RESOLUTION_REOPENED%' => Issue::RESOLUTION_REOPENED,
                 '%%' => 'None',
-                '%comment_url%' => 'comment',
+                '%comment_url%' => '<a href="' . $this->generateUrl('issue_view', ['id' => $activity->getIssue()->getId()]) . $commentAnchor . '">comment</a>',
             ];
 
             foreach ($values as $key => $value) {
