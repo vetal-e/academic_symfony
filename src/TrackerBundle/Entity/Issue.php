@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\EntityListeners({"TrackerBundle\Entity\Listener\IssueListener"})
  */
-class Issue
+class Issue implements HomePageListableInterface
 {
     const TYPE_STORY   = 'Story';
     const TYPE_TASK    = 'Task';
@@ -687,5 +687,15 @@ class Issue
     public function getActivities()
     {
         return $this->activities;
+    }
+
+    public function getRoute()
+    {
+        return 'issue_view';
+    }
+
+    public function getCaption()
+    {
+        return $this->getCode() . ' ' . $this->getSummary();
     }
 }
