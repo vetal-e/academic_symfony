@@ -22,6 +22,14 @@
             </div>
 
             <div class="form-group">
+                {% if is_granted('edit', issue) %}
+                    <a href="{{ path('issue_edit', {'id': issue.id}) }}" class="col-sm-2">
+                        Edit issue
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
                 <label class="col-sm-2">Created at</label>
                 <div class="col-sm-4">{{ issue.createdAt|date('Y-m-d H:i:s') }}</div>
 
@@ -139,19 +147,13 @@
             <div class="form-group">
                 <label class="col-sm-2">Activities</label>
                 <div class="col-sm-10">
-                    {% for activity in issue.activities %}
-                        <div class="col-sm-12">
-                        </div>
+                    {% for activity in activities %}
+                        <li class="list-group-item">
+                            <div>{{ activity.content | raw }}</div>
+                            <small>{{ activity.createdAt|date('Y-m-d H:i:s') }}</small>
+                        </li>
                     {% endfor %}
                 </div>
-            </div>
-
-            <div class="form-group">
-                {% if is_granted('edit', issue) %}
-                    <a href="{{ path('issue_edit', {'id': issue.id}) }}" class="col-sm-2">
-                        Edit issue
-                    </a>
-                {% endif %}
             </div>
         </fieldset>
     </div>

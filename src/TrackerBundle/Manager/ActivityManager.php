@@ -49,6 +49,18 @@ class ActivityManager
     }
 
     /**
+     * @param Issue $issue
+     * @return Activity[]
+     */
+    public function getIssueActivitiesReadable($issue)
+    {
+        $activities = $this->doctrine->getRepository('TrackerBundle:Issue')->getIssueActivities($issue);
+        $activitiesReadable = $this->replaceActivityPlaceholders($activities);
+
+        return $activitiesReadable;
+    }
+
+    /**
      * @param Activity[] $activities
      * @return Activity[]
      */
