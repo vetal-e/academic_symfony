@@ -33,19 +33,7 @@
                     {% endif %}
 
                     <div class="col-sm-12 list-group">
-                    {% for issue in rootIssues %}
-                        <div class="list-group-item">
-                            <div><a href="{{ path('issue_view', {'id': issue.id}) }}">{{ issue.code }} {{ issue.summary }}</a></div>
-                            <small>{{ issue.createdAt|date('Y-m-d H:i:s') }}
-                                {% if is_granted('edit', issue) %}
-                                    <a href="{{ path('issue_edit', {'id': issue.id}) }}">edit</a>
-                                {% endif %}
-                            </small>
-                            {% if issue.childIssues is not empty %}
-                                <div class="small"><span class="glyphicon glyphicon-triangle-right small" aria-hidden="true"></span> <a href="{{ path('issue_view', {'id': issue.id}) }}">subtasks</a></div>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
+                        {{ lists.issuesList(rootIssues) }}
                     </div>
                 </div>
             </div>
@@ -53,12 +41,7 @@
                 <label class="col-sm-2">Activities</label>
                 <div class="col-sm-10">
                     <div class="col-sm-12 list-group">
-                        {% for activity in activities %}
-                            <li class="list-group-item">
-                                <div>{{ activity.content | raw }}</div>
-                                <small>{{ activity.createdAt|date('Y-m-d H:i:s') }}</small>
-                            </li>
-                        {% endfor %}
+                        {{ lists.activitiesList(activities) }}
                     </div>
                 </div>
             </div>

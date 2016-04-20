@@ -1,13 +1,5 @@
 {% extends "layout.html.twig" %}
 
-{% macro itemsList(items) %}
-    <ul class="list-group">
-        {% for item in items %}
-            <li class="list-group-item"><div><a href="{{ path(item.route, {'id': item.id}) }}">{{ item.caption }}</a></div></li>
-        {% endfor %}
-    </ul>
-{% endmacro %}
-
 {% block head_style %}
     {{ parent() }}
 {% endblock %}
@@ -20,8 +12,6 @@
 {% block content %}
     <h1>Issue Tracker Service</h1>
 
-    {% import _self as blocks %}
-
     <ul class="nav nav-pills nav-stacked col-sm-3">
         <li class="active"><a data-toggle="pill" href="#projects">Projects</a></li>
         <li><a data-toggle="pill" href="#issues">Issues</a></li>
@@ -31,22 +21,15 @@
     <div class="tab-content col-sm-9">
         <div id="projects" class="tab-pane fade in active">
             <h3>Projects</h3>
-            {{ blocks.itemsList(projects) }}
+            {{ lists.simpleList(projects) }}
         </div>
         <div id="issues" class="tab-pane fade in">
             <h3>Issues</h3>
-            {{ blocks.itemsList(issues) }}
+            {{ lists.issuesList(issues) }}
         </div>
         <div id="activities" class="tab-pane fade in">
             <h3>Activities</h3>
-            <ul class="list-group">
-                {% for activity in activities %}
-                    <li class="list-group-item">
-                        <div>{{ activity.content | raw }}</div>
-                        <small>{{ activity.createdAt|date('Y-m-d H:i:s') }}</small>
-                    </li>
-                {% endfor %}
-            </ul>
+            {{ lists.activitiesList(activities) }}
         </div>
     </div>
 {% endblock %}
