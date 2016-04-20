@@ -33,9 +33,13 @@ class UserController extends Controller
             throw $this->createNotFoundException('User not found');
         }
 
+        $activitiesManager = $this->get('tracker.activity.manager');
+        $userActivities = $activitiesManager->getUserActivitiesReadable($user);
+
         return [
             'user' => $user,
             'roles' => implode(', ', $user->getRoleNames()),
+            'activities' => $userActivities,
         ];
     }
 

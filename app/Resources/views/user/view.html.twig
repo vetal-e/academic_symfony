@@ -14,25 +14,36 @@
         <fieldset>
             <legend>User info</legend>
             <div class="form-group">
-                <label class="col-sm-3">Email</label>
-                <div class="col-sm-9">{{ user.email }}</div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3">Username</label>
-                <div class="col-sm-9">{{ user.username }}</div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3">Full name</label>
-                <div class="col-sm-9">{{ user.fullName }}</div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3">Roles</label>
-                <div class="col-sm-9">{{ roles }}</div>
-            </div>
-            <div class="form-group">
-                <a href="{{ path('user_edit', {'id': user.id}) }}" class="col-sm-3">
+                <a href="{{ path('user_edit', {'id': user.id}) }}" class="col-sm-2">
                     Edit user info
                 </a>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">Email</label>
+                <div class="col-sm-10">{{ user.email }}</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">Username</label>
+                <div class="col-sm-10">{{ user.username }}</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">Full name</label>
+                <div class="col-sm-10">{{ user.fullName }}</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">Roles</label>
+                <div class="col-sm-10">{{ roles }}</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">Activities</label>
+                <div class="col-sm-10">
+                    {% for activity in activities %}
+                        <li class="list-group-item">
+                            <div>{{ activity.content | raw }}</div>
+                            <small>{{ activity.createdAt|date('Y-m-d H:i:s') }}</small>
+                        </li>
+                    {% endfor %}
+                </div>
             </div>
         </fieldset>
     </div>
