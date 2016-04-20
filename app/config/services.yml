@@ -37,6 +37,11 @@ services:
         arguments:  ["@security.token_storage"]
         tags:
             - { name: doctrine.orm.entity_listener }
+    tracker.kernel.event_listener:
+        class:      TrackerBundle\EventListener\KernelListener
+        arguments:  ["@doctrine", "@security.token_storage"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.view }
     tracker.activity.manager:
         class:      TrackerBundle\Manager\ActivityManager
         arguments:  ["@doctrine", "@router"]

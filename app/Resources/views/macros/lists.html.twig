@@ -1,7 +1,7 @@
-{% macro simpleList(items) %}
-    <ul class="list-group">
+{% macro simpleList(items, ulClass, liClass) %}
+    <ul class="{{ ulClass | default('list-group') }}">
         {% for item in items %}
-            <li class="list-group-item"><div><a href="{{ path(item.route, {'id': item.id}) }}">{{ item.caption }}</a></div></li>
+            <li class="{{ liClass | default('list-group-item') }}"><a href="{{ path(item.route, {'id': item.id}) }}">{{ item.caption }}</a></li>
         {% endfor %}
     </ul>
 {% endmacro %}
