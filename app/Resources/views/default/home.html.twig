@@ -21,6 +21,10 @@
     <div class="tab-content col-sm-9">
         <div id="projects" class="tab-pane fade in active">
             <h3>Projects</h3>
+            {% if is_granted('create_project', app.user) %}
+                <a href="{{ path('project_create') }}">New project</a>
+            {% endif %}
+
             {{ lists.simpleList(projects) }}
         </div>
         <div id="issues" class="tab-pane fade in">

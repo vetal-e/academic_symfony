@@ -32,6 +32,10 @@
                             {{ lists.simpleList(menuIssues, 'dropdown-menu', ' ') }}
                         </li>
                     {% endif %}
+
+                    {% if is_granted('create_project', app.user) %}
+                        <li class="active"><a href="{{ path('project_create') }}">New project</a></li>
+                    {% endif %}
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

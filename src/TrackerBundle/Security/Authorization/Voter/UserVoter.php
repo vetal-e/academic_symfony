@@ -10,10 +10,11 @@ class UserVoter extends AbstractVoter
 {
     const EDIT = 'edit';
     const CHANGE_ROLES = 'change_roles';
+    const CREATE_PROJECT = 'create_project';
 
     protected function getSupportedAttributes()
     {
-        return array(self::EDIT, self::CHANGE_ROLES);
+        return array(self::EDIT, self::CHANGE_ROLES, self::CREATE_PROJECT);
     }
 
     protected function getSupportedClasses()
@@ -49,6 +50,11 @@ class UserVoter extends AbstractVoter
                 break;
             case self::CHANGE_ROLES:
                 if ($user->hasRole('ROLE_ADMIN')) {
+                    return true;
+                }
+                break;
+            case self::CREATE_PROJECT:
+                if ($user->hasRole('ROLE_MANAGER') or $user->hasRole('ROLE_ADMIN')) {
                     return true;
                 }
                 break;
