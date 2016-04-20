@@ -22,24 +22,30 @@ class UserController extends Controller
      */
     public function viewAction($id = null)
     {
+        $userRepository = $this->getDoctrine()->getRepository('TrackerBundle:User');
+
         /** @var User $user */
         if (empty($id)) {
             $user = $this->getUser();
         } else {
-            $user = $this->getDoctrine()->getRepository('TrackerBundle:User')->findOneById($id);
+            $user = $userRepository->findOneById($id);
         }
 
         if (empty($user)) {
             throw $this->createNotFoundException('User not found');
         }
 
+        $issueRepository = $this->getDoctrine()->getRepository('TrackerBundle:Issue');
         $activitiesManager = $this->get('tracker.activity.manager');
+
         $userActivities = $activitiesManager->getUserActivitiesReadable($user);
+        $assignedIssues = $issueRepository->getUserAssignedIssues($user);
 
         return [
             'user' => $user,
             'roles' => implode(', ', $user->getRoleNames()),
             'activities' => $userActivities,
+            'issues' => $assignedIssues,
         ];
     }
 

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use TrackerBundle\Entity\Activity;
 use TrackerBundle\Entity\Issue;
 use TrackerBundle\Entity\Project;
+use TrackerBundle\Entity\User;
 
 /**
  * IssueRepository
@@ -21,12 +22,41 @@ class IssueRepository extends EntityRepository
      */
     public function getRootProjectIssues(Project $project)
     {
-        $rootProjectIssues = $this->findBy([
-            'project' => $project,
-            'parentIssue' => null,
-        ]);
+        $rootProjectIssues = $this->findBy(
+            [
+                'project' => $project,
+                'parentIssue' => null,
+            ],
+            [
+                'updatedAt' => 'DESC',
+            ]
+        );
 
         return $rootProjectIssues;
+    }
+
+    /**
+     * @param User $user
+     * @return Issue[]
+     */
+    public function getUserAssignedIssues(User $user)
+    {
+        $issues = $this->createQueryBuilder('i')
+            ->innerJoin('i.assignee', 'u')
+            ->where('u.id = :userId')
+            ->andWhere('i.status <> :statusClosed or i.status is null')
+            ->andWhere('i.resolution <> :resolutionResolved or i.resolution is null')
+            ->setParameters([
+                'userId' => $user->getId(),
+                'statusClosed' => 'STATUS_CLOSED',
+                'resolutionResolved' => 'RESOLUTION_RESOLVED',
+            ])
+            ->orderBy('i.updatedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+        ;
+
+        return $issues;
     }
 
     /**

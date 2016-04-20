@@ -14,9 +14,11 @@
         <fieldset>
             <legend>User info</legend>
             <div class="form-group">
-                <a href="{{ path('user_edit', {'id': user.id}) }}" class="col-sm-2">
-                    Edit user info
-                </a>
+                {% if is_granted('edit', user) %}
+                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="col-sm-2">
+                        Edit user info
+                    </a>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label class="col-sm-2">Email</label>
@@ -33,6 +35,24 @@
             <div class="form-group">
                 <label class="col-sm-2">Roles</label>
                 <div class="col-sm-10">{{ roles }}</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">Assigned issues</label>
+                <div class="col-sm-10">
+                    {% for issue in issues %}
+                        <div class="list-group-item">
+                            <div><a href="{{ path('issue_view', {'id': issue.id}) }}">{{ issue.code }} {{ issue.summary }}</a></div>
+                            <small>{{ issue.createdAt|date('Y-m-d H:i:s') }}
+                                {% if is_granted('edit', issue) %}
+                                    <a href="{{ path('issue_edit', {'id': issue.id}) }}">edit</a>
+                                {% endif %}
+                            </small>
+                            {% if issue.childIssues is not empty %}
+                                <div class="small"><span class="glyphicon glyphicon-triangle-right small" aria-hidden="true"></span> <a href="{{ path('issue_view', {'id': issue.id}) }}">subtasks</a></div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2">Activities</label>
