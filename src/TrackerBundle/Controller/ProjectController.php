@@ -32,11 +32,15 @@ class ProjectController extends Controller
         );
 
         $issueRepository = $this->getDoctrine()->getRepository('TrackerBundle:Issue');
+        $activitiesManager = $this->get('tracker.activity.manager');
+
         $rootProjectIssues = $issueRepository->getRootProjectIssues($project);
+        $projectActivities = $activitiesManager->getProjectActivitiesReadable($project);
 
         return [
             'project' => $project,
             'rootIssues' => $rootProjectIssues,
+            'activities' => $projectActivities,
         ];
     }
 
