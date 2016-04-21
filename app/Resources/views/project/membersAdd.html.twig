@@ -1,0 +1,46 @@
+{% extends "layout.html.twig" %}
+
+{% block head_style %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    {{ parent() }}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+
+    <fieldset>
+        <legend>{{ form.vars.label }}</legend>
+
+        <div class="form-group">
+            <label class="control-label col-sm-3 required">Project</label>
+            <div class="col-sm-9" style="padding-top: 7px">
+                <a href="{{ path('project_view', {'id': project.id}) }}">{{ project.code }} {{ project.label }}</a>
+            </div>
+        </div>
+
+        {% for row in form %}
+            {% if row.vars.name != 'save' %}
+                {{ form_row(row) }}
+            {% endif %}
+        {% endfor %}
+
+        <div class="form-group">
+            <label class="control-label col-sm-3 required">Add users</label>
+            <div class="col-sm-9" style="padding-top: 7px">
+                <select id="new_members" name="project[newMembers][]" required="required" class=" form-control" multiple="multiple">
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }} {{ user.fullName ? "(#{user.fullName})" : '' }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        {{ form_row(form.save) }}
+    </fieldset>
+
+    {{ form_end(form) }}
+{% endblock content %}
