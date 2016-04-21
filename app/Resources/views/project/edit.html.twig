@@ -24,12 +24,16 @@
         <div class="form-group">
             <label class="control-label col-sm-3 required">Members</label>
             <div class="col-sm-9" style="padding-top: 7px">
-                <a href="{{ path('project_members_add', {'id': project.id}) }}">Add members</a>
+                {% if is_granted('manage_members', project) %}
+                    <a href="{{ path('project_members_add', {'id': project.id}) }}">Add members</a>
+                {% endif %}
                 <div class="col-sm-12">
                 {% for member in project.members %}
                     <div>
                         <a href="{{ path('user_view', {'id': member.id}) }}">{{ member.username }} {{ member.fullName ? "(#{member.fullName})" : '' }}</a>
-                        <a class="small" href="{{ path('project_member_remove', {'project_id': project.id, 'user_id': member.id}) }}">delete</a>
+                        {% if is_granted('manage_members', project) %}
+                            <a class="small" href="{{ path('project_member_remove', {'project_id': project.id, 'user_id': member.id}) }}">delete</a>
+                        {% endif %}
                     </div>
                 {% endfor %}
                 </div>

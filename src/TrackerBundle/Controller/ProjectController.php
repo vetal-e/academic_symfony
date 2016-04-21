@@ -130,6 +130,12 @@ class ProjectController extends Controller
      */
     public function addMembersAction(Request $request, Project $project)
     {
+        $this->denyAccessUnlessGranted(
+            'manage_members',
+            $project,
+            'You don\'t have permissions to edit this project'
+        );
+
         $userRepository = $this->getDoctrine()->getRepository('TrackerBundle:User');
         $allUsers = $userRepository->findBy([], ['id' => 'DESC']);
 
@@ -179,6 +185,12 @@ class ProjectController extends Controller
      */
     public function removeMemberAction(Project $project, User $user)
     {
+        $this->denyAccessUnlessGranted(
+            'manage_members',
+            $project,
+            'You don\'t have permissions to edit this project'
+        );
+
         $entityManager = $this->getDoctrine()->getManager();
         $project->removeMember($user);
         $entityManager->flush();

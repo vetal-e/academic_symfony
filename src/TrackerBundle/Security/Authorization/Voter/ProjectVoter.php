@@ -13,10 +13,11 @@ class ProjectVoter extends AbstractVoter
     const CREATE = 'create';
     const EDIT = 'edit';
     const CREATE_ISSUE = 'create_issue';
+    const MANAGE_MEMBERS = 'manage_members';
 
     protected function getSupportedAttributes()
     {
-        return array(self::VIEW, self::CREATE, self::EDIT, self::CREATE_ISSUE);
+        return array(self::VIEW, self::CREATE, self::EDIT, self::CREATE_ISSUE, self::MANAGE_MEMBERS);
     }
 
     protected function getSupportedClasses()
