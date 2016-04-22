@@ -14,7 +14,7 @@ class UserControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->restart();
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', '/login');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
