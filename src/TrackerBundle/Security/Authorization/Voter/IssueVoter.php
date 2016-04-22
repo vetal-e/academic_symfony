@@ -40,23 +40,29 @@ class IssueVoter extends AbstractVoter
             throw new \LogicException('The user is of unsupported class');
         }
 
-        if ($user->hasRole('ROLE_MANAGER') or $user->hasRole('ROLE_ADMIN')) {
+        if (in_array('ROLE_MANAGER', $user->getRoles()) or in_array('ROLE_ADMIN', $user->getRoles())) {
             return true;
         }
 
         switch ($attribute) {
             case self::VIEW:
-                if ($user->hasRole('ROLE_OPERATOR') and $issue->getProject()->getMembers()->contains($user)) {
+                if (in_array('ROLE_OPERATOR', $user->getRoles())
+                    and $issue->getProject()->getMembers()->contains($user)
+                ) {
                     return true;
                 }
                 break;
             case self::CREATE:
-                if ($user->hasRole('ROLE_OPERATOR') and $issue->getProject()->getMembers()->contains($user)) {
+                if (in_array('ROLE_OPERATOR', $user->getRoles())
+                    and $issue->getProject()->getMembers()->contains($user)
+                ) {
                     return true;
                 }
                 break;
             case self::EDIT:
-                if ($user->hasRole('ROLE_OPERATOR') and $issue->getProject()->getMembers()->contains($user)) {
+                if (in_array('ROLE_OPERATOR', $user->getRoles())
+                    and $issue->getProject()->getMembers()->contains($user)
+                ) {
                     return true;
                 }
                 break;
