@@ -21,6 +21,7 @@
             {% endif %}
         {% endfor %}
 
+        {% if project is defined %}
         <div class="form-group">
             <label class="control-label col-sm-3 required">Members</label>
             <div class="col-sm-9" style="padding-top: 7px">
@@ -39,6 +40,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
         {{ form_row(form.save) }}
     </fieldset>
