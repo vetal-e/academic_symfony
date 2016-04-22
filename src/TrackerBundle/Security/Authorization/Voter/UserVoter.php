@@ -38,7 +38,7 @@ class UserVoter extends AbstractVoter
             throw new \LogicException('The user is of unsupported class');
         }
 
-        if ($user->hasRole('ROLE_ADMIN')) {
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
             return true;
         }
 
@@ -49,12 +49,12 @@ class UserVoter extends AbstractVoter
                 }
                 break;
             case self::CHANGE_ROLES:
-                if ($user->hasRole('ROLE_ADMIN')) {
+                if (in_array('ROLE_ADMIN', $user->getRoles())) {
                     return true;
                 }
                 break;
             case self::CREATE_PROJECT:
-                if ($user->hasRole('ROLE_MANAGER') or $user->hasRole('ROLE_ADMIN')) {
+                if (in_array('ROLE_MANAGER', $user->getRoles()) or in_array('ROLE_ADMIN', $user->getRoles())) {
                     return true;
                 }
                 break;
