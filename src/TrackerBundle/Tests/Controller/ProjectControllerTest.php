@@ -17,6 +17,7 @@ class ProjectControllerTest extends WebTestCase
     const TEST_USER_NAME = 'trackerbundleManager';
     const TEST_USER_PASSWORD = 'trackerbundleManager';
 
+    /** @var Client $client */
     private $client;
 
     public function testProjectCreate()

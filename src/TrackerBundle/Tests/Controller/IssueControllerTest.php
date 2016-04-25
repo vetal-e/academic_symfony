@@ -20,6 +20,7 @@ class IssueControllerTest extends WebTestCase
     const TEST_USER_PASSWORD = 'trackerbundleOperator';
     const TEST_PROJECT_CODE = 'CTE';
 
+    /** @var Client $client */
     private $client;
 
     public function testIssueCreate()
