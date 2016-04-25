@@ -52,5 +52,10 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
         $userManager->updateUser($admin);
         $userManager->updateUser($manager);
         $userManager->updateUser($operator);
+
+        $manager->addRole('ROLE_MANAGER');
+        $admin->addRole('ROLE_ADMIN');
+
+        $this->container->get('doctrine')->getManager()->flush();
     }
 }

@@ -13,25 +13,40 @@ class ProjectControllerTest extends WebTestCase
     const TEST_PROJECT_CODE = 'TSTPRJ';
     const TEST_PROJECT_SUMMARY = 'Test project summary';
 
+    // This user should be created from the fixture
+    const TEST_USER_NAME = 'trackerbundleManager';
+    const TEST_USER_PASSWORD = 'trackerbundleManager';
+
+    private $client;
+
     public function testProjectCreate()
     {
-        $client = static::createClient();
-        $client->restart();
-        $crawler = $client->request('GET', '/project/create/');
+        $this->client = static::createClient();
+        $this->client->restart();
+        $crawler = $this->client->request('GET', '/project/login/');
 
-        $code = $this->submitProjectForm($client, $crawler);
+        $testLoginManager = $this->client->getContainer()->get('tracker.test_login.manager');
+        $crawler = $testLoginManager->doLogin($this, $this->client, self::TEST_USER_NAME, self::TEST_USER_PASSWORD);
 
-        $this->removeTestProject($client, $code);
+        $crawler = $this->client->request('GET', '/project/create/');
+
+        $code = $this->submitProjectForm($crawler);
+
+        $this->removeTestProject($code);
     }
 
     public function testProjectEdit()
     {
-        $client = static::createClient();
-        $client->restart();
+        $this->client = static::createClient();
+        $this->client->restart();
+        $crawler = $this->client->request('GET', '/project/login/');
 
-        $uniquePart = $this->getUniquePart($client);
+        $testLoginManager = $this->client->getContainer()->get('tracker.test_login.manager');
+        $crawler = $testLoginManager->doLogin($this, $this->client, self::TEST_USER_NAME, self::TEST_USER_PASSWORD);
 
-        $container = $client->getContainer();
+        $uniquePart = $this->getUniquePart();
+
+        $container = $this->client->getContainer();
         $entityManager = $container->get('doctrine')->getManager();
 
         $newProject = new Project();
@@ -41,79 +56,76 @@ class ProjectControllerTest extends WebTestCase
         $entityManager->persist($newProject);
         $entityManager->flush();
 
-        $crawler = $client->request('GET', '/project/edit/' . $newProject->getId());
+        $crawler = $this->client->request('GET', '/project/edit/' . $newProject->getId());
 
-        $code = $this->submitProjectForm($client, $crawler);
+        $code = $this->submitProjectForm($crawler);
 
-        $this->removeTestProject($client, $code);
+        $this->removeTestProject($code);
     }
 
     /**
-     * @param Client $client
      * @param Crawler $crawler
      * @return string
      */
-    private function submitProjectForm(Client $client, Crawler $crawler)
+    private function submitProjectForm(Crawler $crawler)
     {
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->filter('form[name=project]')->count());
         $form = $crawler->filter('form[name=project]')->form();
 
-        $uniquePart = $this->getUniquePart($client);
+        $uniquePart = $this->getUniquePart();
         $form['project[label]'] = self::TEST_PROJECT_LABEL . $uniquePart;
         $form['project[code]'] = self::TEST_PROJECT_CODE . $uniquePart;
         $form['project[summary]'] = self::TEST_PROJECT_SUMMARY;
-        $crawler = $client->submit($form);
-        $this->assertTrue($client->getResponse()->isRedirect());
+        $crawler = $this->client->submit($form);
+        $this->assertTrue($this->client->getResponse()->isRedirect());
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
         $this->assertContains(
             self::TEST_PROJECT_LABEL . $uniquePart,
-            $client->getResponse()->getContent()
+            $this->client->getResponse()->getContent()
         );
         $this->assertContains(
             self::TEST_PROJECT_CODE . $uniquePart,
-            $client->getResponse()->getContent()
+            $this->client->getResponse()->getContent()
         );
         $this->assertContains(
             self::TEST_PROJECT_SUMMARY,
-            $client->getResponse()->getContent()
+            $this->client->getResponse()->getContent()
         );
 
         return self::TEST_PROJECT_CODE . $uniquePart;
     }
 
     /**
-     * @param Client $client
      * @return string
      */
-    private function getUniquePart(Client $client)
+    private function getUniquePart()
     {
         $randomPart = (string) random_int(1000000000, 10000000000 - 1);
         $label = self::TEST_PROJECT_LABEL . $randomPart;
         $code = self::TEST_PROJECT_CODE . $randomPart;
 
-        $container = $client->getContainer();
+        $container = $this->client->getContainer();
         $projectRepository = $container->get('doctrine')->getRepository('TrackerBundle:Project');
 
         $projectByLabel = $projectRepository->findOneByLabel($label);
         $projectByCode = $projectRepository->findOneByCode($code);
 
         if (!empty($projectByLabel) or !empty($projectByCode)) {
-            return $this->getUniquePart($client);
+            return $this->getUniquePart();
         } else {
             return $randomPart;
         }
     }
 
     /**
-     * @param Client $client
      * @param string $code
      */
-    private function removeTestProject(Client $client, $code)
+    private function removeTestProject($code)
     {
-        $container = $client->getContainer();
+        $container = $this->client->getContainer();
         $entityManager = $container->get('doctrine')->getManager();
         $projectRepository = $container->get('doctrine')->getRepository('TrackerBundle:Project');
 

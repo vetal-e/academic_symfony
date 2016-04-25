@@ -48,7 +48,8 @@ class UserControllerTest extends WebTestCase
             'roles' => ['ROLE_OPERATOR', 'ROLE_MANAGER', 'ROLE_ADMIN'],
         ];
 
-        $crawler = $this->doLogin(self::TEST_USER_NAME, self::TEST_USER_PASSWORD);
+        $testLoginManager = $this->client->getContainer()->get('tracker.test_login.manager');
+        $crawler = $testLoginManager->doLogin($this, $this->client, self::TEST_USER_NAME, self::TEST_USER_PASSWORD);
 
         $this->client = $this->submitUserEditForm($userInfo);
 
@@ -100,21 +101,5 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
 
         return $this->client;
-    }
-
-    private function doLogin($username, $password)
-    {
-        $crawler = $this->client->request('GET', '/login');
-        $form = $crawler->selectButton('_submit')->form(array(
-            '_username'  => $username,
-            '_password'  => $password,
-        ));
-        $this->client->submit($form);
-
-        $this->assertTrue($this->client->getResponse()->isRedirect());
-
-        $crawler = $this->client->followRedirect();
-
-        return $crawler;
     }
 }

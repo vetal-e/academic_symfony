@@ -45,3 +45,5 @@ services:
     tracker.activity.manager:
         class:      TrackerBundle\Manager\ActivityManager
         arguments:  ["@doctrine", "@router"]
+    tracker.test_login.manager:
+        class:      TrackerBundle\Manager\TestLoginManager
