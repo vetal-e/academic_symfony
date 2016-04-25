@@ -2,7 +2,9 @@
 
 namespace TrackerBundle\Tests\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use TrackerBundle\Entity\User;
 
 class UserControllerTest extends WebTestCase
 {
@@ -10,24 +12,29 @@ class UserControllerTest extends WebTestCase
     const TEST_USER_NAME = 'testuser';
     const TEST_USER_PASSWORD = 'password';
 
+    /** @var Client $client */
+    private $client;
+
     public function testUserEdit()
     {
-        $client = static::createClient();
-        $client->restart();
-        $crawler = $client->request('GET', '/login');
+        $this->client = static::createClient();
+        $this->client->restart();
+        $crawler = $this->client->request('GET', '/login');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
-        $container = $client->getContainer();
+        $container = $this->client->getContainer();
 
         $userRepository = $container->get('doctrine')->getRepository('TrackerBundle:User');
         $existingUser = $userRepository->findOneBy(['email' => self::TEST_USER_EMAIL]);
         if (empty($existingUser)) {
             $userManager = $container->get('fos_user.user_manager');
+            /** @var User $newUser */
             $newUser = $userManager->createUser();
             $newUser->setEmail(self::TEST_USER_EMAIL);
             $newUser->setUsername(self::TEST_USER_NAME);
             $newUser->setPlainPassword(self::TEST_USER_PASSWORD);
+            $newUser->setEnabled(true);
             $userManager->updateUser($newUser);
 
             $existingUser = $userRepository->findOneBy(['email' => self::TEST_USER_EMAIL]);
@@ -40,23 +47,27 @@ class UserControllerTest extends WebTestCase
             'fullName' => 'New full name',
             'roles' => ['ROLE_OPERATOR', 'ROLE_MANAGER', 'ROLE_ADMIN'],
         ];
-        $client = $this->submitUserEditForm($client, $userInfo);
+
+        $crawler = $this->doLogin(self::TEST_USER_NAME, self::TEST_USER_PASSWORD);
+
+        $this->client = $this->submitUserEditForm($userInfo);
 
         $this->assertContains(
             $userInfo['email'],
-            $client->getResponse()->getContent()
+            $this->client->getResponse()->getContent()
         );
         $this->assertContains(
             $userInfo['username'],
-            $client->getResponse()->getContent()
+            $this->client->getResponse()->getContent()
         );
         $this->assertContains(
             $userInfo['fullName'],
-            $client->getResponse()->getContent()
+            $this->client->getResponse()->getContent()
         );
+        // this user has no permissions to change roles
         $this->assertContains(
-            'Operator, Manager, Administrator',
-            $client->getResponse()->getContent()
+            'Operator',
+            $this->client->getResponse()->getContent()
         );
 
         // Return the user info back to original state
@@ -67,14 +78,14 @@ class UserControllerTest extends WebTestCase
             'fullName' => '',
             'roles' => ['ROLE_OPERATOR'],
         ];
-        $client = $this->submitUserEditForm($client, $userInfo);
+        $this->client = $this->submitUserEditForm($userInfo);
     }
 
-    private function submitUserEditForm($client, $userInfo)
+    private function submitUserEditForm($userInfo)
     {
-        $crawler = $client->request('GET', '/user/edit/' . $userInfo['id']);
+        $crawler = $this->client->request('GET', '/user/edit/' . $userInfo['id']);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $this->assertEquals(1, $crawler->filter('form[name=user]')->count());
         $form = $crawler->filter('form[name=user]')->form();
@@ -83,11 +94,27 @@ class UserControllerTest extends WebTestCase
         $form['user[username]'] = $userInfo['username'];
         $form['user[fullName]'] = $userInfo['fullName'];
         $form['user[roles]']->select($userInfo['roles']);
-        $crawler = $client->submit($form);
-        $this->assertTrue($client->getResponse()->isRedirect());
+        $crawler = $this->client->submit($form);
+        $this->assertTrue($this->client->getResponse()->isRedirect());
 
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
-        return $client;
+        return $this->client;
+    }
+
+    private function doLogin($username, $password)
+    {
+        $crawler = $this->client->request('GET', '/login');
+        $form = $crawler->selectButton('_submit')->form(array(
+            '_username'  => $username,
+            '_password'  => $password,
+        ));
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+
+        return $crawler;
     }
 }
