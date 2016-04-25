@@ -49,14 +49,14 @@
                     {% endif %}
                 </div>
                 <small>{{ comment.updatedAt|date('Y-m-d H:i:s') }}</small>
-                <pre>{{ comment.body }}</pre>
+                <div class="commentBody">{{ comment.body | nl2br }}</div>
             </li>
         {% endfor %}
     </ul>
 
     <script>
         $(function() {
-            $(window.location.hash).find('pre').addClass('bg-warning');
+            $(window.location.hash).find('.commentBody').addClass('bg-warning');
         });
     </script>
 {% endmacro %}

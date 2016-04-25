@@ -2,13 +2,14 @@
 
 namespace TrackerBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use TrackerBundle\Entity\User;
 
-class LoadUserData implements FixtureInterface, ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -57,5 +58,14 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
         $admin->addRole('ROLE_ADMIN');
 
         $this->container->get('doctrine')->getManager()->flush();
+
+        $this->addReference('adminUser', $admin);
+        $this->addReference('managerUser', $manager);
+        $this->addReference('operatorUser', $operator);
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }
