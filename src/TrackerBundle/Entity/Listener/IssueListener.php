@@ -46,7 +46,12 @@ class IssueListener
      */
     public function postPersist(Issue $issue, LifecycleEventArgs $event)
     {
-        $user = $this->tokenStorage->getToken()->getUser();
+        if ('cli' === php_sapi_name()) {
+            // This relies on the issue reporter set in the fixture
+            $user = $issue->getReporter();
+        } else {
+            $user = $this->tokenStorage->getToken()->getUser();
+        }
 
         $activity = new Activity();
         $activity->setType('TYPE_ISSUE_CREATED');
@@ -67,7 +72,12 @@ class IssueListener
      */
     public function preUpdate(Issue $issue, PreUpdateEventArgs $event)
     {
-        $user = $this->tokenStorage->getToken()->getUser();
+        if ('cli' === php_sapi_name()) {
+            // This relies on the issue reporter set in the fixture
+            $user = $issue->getReporter();
+        } else {
+            $user = $this->tokenStorage->getToken()->getUser();
+        }
 
         $checkFields = [
             'status',

@@ -5,22 +5,10 @@ namespace TrackerBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use TrackerBundle\Entity\Project;
 
-class LoadProjectData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadProjectData extends AbstractFixture implements OrderedFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     public function load(ObjectManager $manager)
     {
         $project = new Project();
