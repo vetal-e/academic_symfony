@@ -43,7 +43,12 @@ class CommentListener
      */
     public function postPersist(Comment $comment, LifecycleEventArgs $event)
     {
-        $user = $this->tokenStorage->getToken()->getUser();
+        if ('cli' === php_sapi_name()) {
+            // This relies on the issue reporter set in the fixture
+            $user = $comment->getIssue()->getReporter();
+        } else {
+            $user = $this->tokenStorage->getToken()->getUser();
+        }
 
         $activity = new Activity();
         $activity->setType('TYPE_ISSUE_COMMENT');
@@ -65,7 +70,12 @@ class CommentListener
      */
     public function preUpdate(Comment $comment, PreUpdateEventArgs $event)
     {
-        $user = $this->tokenStorage->getToken()->getUser();
+        if ('cli' === php_sapi_name()) {
+            // This relies on the issue reporter set in the fixture
+            $user = $comment->getIssue()->getReporter();
+        } else {
+            $user = $this->tokenStorage->getToken()->getUser();
+        }
 
         if ($event->hasChangedField('body')) {
             $activity = new Activity();
