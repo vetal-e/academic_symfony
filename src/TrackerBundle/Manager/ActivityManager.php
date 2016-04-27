@@ -61,11 +61,11 @@ class ActivityManager
     }
 
     /**
-     * @param Activity $activity
+     * @param Activity|Activity[] $activity
      * @param bool $absolutePaths
      * @return Activity
      */
-    public function replaceActivityPlaceholders(Activity $activity, $absolutePaths = false)
+    public function replaceActivityPlaceholders($activity, $absolutePaths = false)
     {
         if (is_array($activity)) {
             return $this->replaceActivityArrayPlaceholders($activity, $absolutePaths);
