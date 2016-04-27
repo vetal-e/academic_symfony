@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="TrackerBundle\Entity\Repository\ActivityRepository")
  * @ORM\Table(name="activity")
  * @ORM\HasLifecycleCallbacks
+ * @ORM\EntityListeners({"TrackerBundle\Entity\Listener\ActivityListener"})
  */
 class Activity
 {
@@ -38,6 +39,13 @@ class Activity
      * @ORM\Column(name="content", type="string", length=255, nullable=true)
      */
     protected $content;
+
+    /**
+     * @var string
+     *
+     * For passing the content with replaced placeholders without persisting to the database
+     */
+    protected $contentReadable;
 
     /**
      * @var Issue
@@ -124,6 +132,29 @@ class Activity
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set content readable
+     *
+     * @param string $contentReadable
+     * @return Activity
+     */
+    public function setContentReadable($contentReadable)
+    {
+        $this->contentReadable = $contentReadable;
+
+        return $this;
+    }
+
+    /**
+     * Get content readable
+     *
+     * @return string
+     */
+    public function getContentReadable()
+    {
+        return $this->contentReadable;
     }
 
     /**

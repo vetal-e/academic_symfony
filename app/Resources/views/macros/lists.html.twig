@@ -10,7 +10,7 @@
     <ul class="list-group">
         {% for activity in activities %}
             <li class="list-group-item">
-                <div>{{ activity.content | raw }}</div>
+                <div>{{ activity.contentReadable | raw }}</div>
                 <small>{{ activity.createdAt|date('Y-m-d H:i:s') }}</small>
             </li>
         {% endfor %}
