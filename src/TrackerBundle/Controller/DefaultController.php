@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use TrackerBundle\Entity\Repository\UserRepository;
 
 class DefaultController extends Controller
 {
@@ -22,16 +21,13 @@ class DefaultController extends Controller
     {
         $user = $this->getUser();
         $userRepository = $this->getDoctrine()->getRepository('TrackerBundle:User');
-        $activitiesManager = $this->get('tracker.activity.manager');
 
         $userProjects = $userRepository->getUserProjects($user);
         $userIssues = $userRepository->getUserIssues($user);
-        $userActivities = $activitiesManager->getUserActivitiesReadable($user);
 
         return [
             'projects' => $userProjects,
             'issues' => $userIssues,
-            'activities' => $userActivities,
         ];
     }
 }

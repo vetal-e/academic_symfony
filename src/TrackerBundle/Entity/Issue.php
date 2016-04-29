@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\EntityListeners({"TrackerBundle\Entity\Listener\IssueListener"})
  */
-class Issue implements HomePageListableInterface
+class Issue implements HomePageListableInterface, ActivitiesGettableEntityInterface
 {
     const TYPE_STORY   = 'Story';
     const TYPE_TASK    = 'Task';

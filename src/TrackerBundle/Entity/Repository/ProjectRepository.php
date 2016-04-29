@@ -6,13 +6,13 @@ use Doctrine\ORM\EntityRepository;
 use TrackerBundle\Entity\Activity;
 use TrackerBundle\Entity\Project;
 
-class ProjectRepository extends EntityRepository
+class ProjectRepository extends EntityRepository implements ActivitiesGettableInterface
 {
     /**
      * @param Project $project
      * @return Activity[]
      */
-    public function getProjectActivities(Project $project)
+    public function getActivities($project)
     {
         $activityRepository = $this->getEntityManager()->getRepository('TrackerBundle:Activity');
         $activities = $activityRepository->createQueryBuilder('a')

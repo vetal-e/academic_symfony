@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="TrackerBundle\Entity\Repository\ProjectRepository")
  * @ORM\Table(name="project")
  */
-class Project implements HomePageListableInterface
+class Project implements HomePageListableInterface, ActivitiesGettableEntityInterface
 {
     /**
      * @var integer

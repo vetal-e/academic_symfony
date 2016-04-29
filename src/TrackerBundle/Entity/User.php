@@ -10,7 +10,7 @@ use FOS\UserBundle\Model\User as FOSUser;
  * @ORM\Entity(repositoryClass="TrackerBundle\Entity\Repository\UserRepository")
  * @ORM\Table(name="`user`")
  */
-class User extends FOSUser
+class User extends FOSUser implements ActivitiesGettableEntityInterface
 {
     const ROLE_OPERATOR = 'Operator';
     const ROLE_MANAGER = 'Manager';

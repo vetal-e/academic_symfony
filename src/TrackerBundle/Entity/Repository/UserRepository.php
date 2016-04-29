@@ -8,7 +8,7 @@ use TrackerBundle\Entity\Issue;
 use TrackerBundle\Entity\Project;
 use TrackerBundle\Entity\User;
 
-class UserRepository extends EntityRepository
+class UserRepository extends EntityRepository implements ActivitiesGettableInterface
 {
     /**
      * @param User $user
@@ -53,7 +53,7 @@ class UserRepository extends EntityRepository
      * @param User $user
      * @return Activity[]
      */
-    public function getUserActivities(User $user)
+    public function getActivities($user)
     {
         $activityRepository = $this->getEntityManager()->getRepository('TrackerBundle:Activity');
         $activities = $activityRepository->createQueryBuilder('a')

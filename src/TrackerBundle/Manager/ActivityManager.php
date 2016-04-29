@@ -4,10 +4,9 @@ namespace TrackerBundle\Manager;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use TrackerBundle\Entity\ActivitiesGettableEntityInterface;
 use TrackerBundle\Entity\Activity;
 use TrackerBundle\Entity\Issue;
-use TrackerBundle\Entity\Project;
-use TrackerBundle\Entity\User;
 
 class ActivityManager
 {
@@ -25,36 +24,13 @@ class ActivityManager
     }
 
     /**
-     * @param Project $project
+     * @param ActivitiesGettableEntityInterface $object
      * @return Activity[]
      */
-    public function getProjectActivitiesReadable(Project $project)
+    public function getActivitiesReadable(ActivitiesGettableEntityInterface $object)
     {
-        $activities = $this->doctrine->getRepository('TrackerBundle:Project')->getProjectActivities($project);
-        $activitiesReadable = $this->replaceActivityPlaceholders($activities);
-
-        return $activitiesReadable;
-    }
-
-    /**
-     * @param User $user
-     * @return Activity[]
-     */
-    public function getUserActivitiesReadable(User $user)
-    {
-        $activities = $this->doctrine->getRepository('TrackerBundle:User')->getUserActivities($user);
-        $activitiesReadable = $this->replaceActivityPlaceholders($activities);
-
-        return $activitiesReadable;
-    }
-
-    /**
-     * @param Issue $issue
-     * @return Activity[]
-     */
-    public function getIssueActivitiesReadable($issue)
-    {
-        $activities = $this->doctrine->getRepository('TrackerBundle:Issue')->getIssueActivities($issue);
+        $className = get_class($object);
+        $activities = $this->doctrine->getRepository($className)->getActivities($object);
         $activitiesReadable = $this->replaceActivityPlaceholders($activities);
 
         return $activitiesReadable;

@@ -36,15 +36,12 @@ class UserController extends Controller
         }
 
         $issueRepository = $this->getDoctrine()->getRepository('TrackerBundle:Issue');
-        $activitiesManager = $this->get('tracker.activity.manager');
 
-        $userActivities = $activitiesManager->getUserActivitiesReadable($user);
         $assignedIssues = $issueRepository->getUserAssignedIssues($user);
 
         return [
             'user' => $user,
             'roles' => implode(', ', $user->getRoleNames()),
-            'activities' => $userActivities,
             'issues' => $assignedIssues,
         ];
     }

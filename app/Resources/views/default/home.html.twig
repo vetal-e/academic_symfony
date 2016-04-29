@@ -33,7 +33,7 @@
         </div>
         <div id="activities" class="tab-pane fade in">
             <h3>Activities</h3>
-            {{ lists.activitiesList(activities) }}
+            {{ lists.activitiesList(getActivities(app.user)) }}
         </div>
     </div>
 {% endblock %}

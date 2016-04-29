@@ -32,12 +32,8 @@ class IssueController extends Controller
             'You don\'t have permissions to view this'
         );
 
-        $activitiesManager = $this->get('tracker.activity.manager');
-        $issueActivities = $activitiesManager->getIssueActivitiesReadable($issue);
-
         return [
             'issue' => $issue,
-            'activities' => $issueActivities,
         ];
     }
 

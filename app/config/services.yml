@@ -55,3 +55,9 @@ services:
     tracker.mail.manager:
         class:      TrackerBundle\Manager\MailManager
         arguments:  ["@service_container"]
+    tracker.activities.twig_extension:
+        class:      TrackerBundle\Twig\ActivitiesExtension
+        public:     false
+        arguments:  ["@tracker.activity.manager"]
+        tags:
+            - { name: twig.extension }
