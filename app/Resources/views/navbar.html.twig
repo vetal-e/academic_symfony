@@ -15,21 +15,21 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
 
-                    {% if menuProjects is defined %}
+                    {% if app.user %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
                                 Projects <span class="caret"></span>
                             </a>
-                            {{ lists.simpleList(menuProjects, 'dropdown-menu', ' ') }}
+                            {{ lists.simpleList(getUserProjects(app.user), 'dropdown-menu', ' ') }}
                         </li>
                     {% endif %}
 
-                    {% if menuIssues is defined %}
+                    {% if app.user %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
                                 Issues <span class="caret"></span>
                             </a>
-                            {{ lists.simpleList(menuIssues, 'dropdown-menu', ' ') }}
+                            {{ lists.simpleList(getUserIssues(app.user), 'dropdown-menu', ' ') }}
                         </li>
                     {% endif %}
 
