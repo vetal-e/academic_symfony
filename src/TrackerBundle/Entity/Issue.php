@@ -4,12 +4,18 @@ namespace TrackerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use TrackerBundle\Validator\Constraints\IssueIsSubtaskForStory;
+use TrackerBundle\Validator\Constraints\IssueParentIsStory;
+use TrackerBundle\Validator\Constraints\SubtaskHasParent;
 
 /**
  * @ORM\Entity(repositoryClass="TrackerBundle\Entity\Repository\IssueRepository")
  * @ORM\Table(name="issue")
  * @ORM\HasLifecycleCallbacks
  * @ORM\EntityListeners({"TrackerBundle\Entity\Listener\IssueListener"})
+ * @IssueIsSubtaskForStory
+ * @IssueParentIsStory
+ * @SubtaskHasParent
  */
 class Issue implements HomePageListableInterface, ActivitiesGettableEntityInterface
 {
