@@ -16,6 +16,11 @@ use TrackerBundle\Validator\Constraints\SubtaskHasParent;
  * @IssueIsSubtaskForStory
  * @IssueParentIsStory
  * @SubtaskHasParent
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Issue implements HomePageListableInterface, ActivitiesGettableEntityInterface
 {

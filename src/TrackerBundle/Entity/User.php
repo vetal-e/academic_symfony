@@ -9,6 +9,8 @@ use FOS\UserBundle\Model\User as FOSUser;
 /**
  * @ORM\Entity(repositoryClass="TrackerBundle\Entity\Repository\UserRepository")
  * @ORM\Table(name="`user`")
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class User extends FOSUser implements ActivitiesGettableEntityInterface
 {
