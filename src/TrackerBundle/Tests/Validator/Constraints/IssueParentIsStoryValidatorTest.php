@@ -95,7 +95,7 @@ class IssueParentIsStoryValidatorTest extends \PHPUnit_Framework_TestCase
                 ->method('getType')
                 ->willReturn('TYPE_STORY');
         }
-       $this->builder->expects($this->exactly($expected))
+        $this->builder->expects($this->exactly($expected))
             ->method('addViolation');
 
         $this->validator->validate($this->issue, $this->constraint);

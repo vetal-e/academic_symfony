@@ -105,5 +105,4 @@ class EntityType extends AbstractType
     {
         return $this->name;
     }
-
 }
